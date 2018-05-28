@@ -1,0 +1,22 @@
+{
+  "name": "cmp",
+  "version": "1.0.0",
+  "description": "Consent Management Platform",
+  "scripts": {
+    "clean": "rm -rf build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ouest-France/cmp.git"
+  },
+  "keywords": [
+    "cmp"
+  ],
+  "author": "Ouest-France",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ouest-France/cmp/issues"
+  },
+  "homepage": "https://github.com/Ouest-France/cmp#readme"
+}
