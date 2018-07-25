@@ -27,7 +27,6 @@
   
 
 ### Industrialisation
-  
 - [ ] yarn
 - [ ] requires gulp
 - [ ] job concatenation
@@ -37,7 +36,6 @@
 - [ ] job build
 - [ ] job deploiement https://sipaof.mgr.consensu.org/sipa-cmp.min.js
 - [ ] installation circle-ci github
-  
 - [ ] licence?
   
 ## NICE
