@@ -1,5 +1,3 @@
-TODO Logo ?
-
 # Consent Management Platform
 
 Gestion des cookies en conformité **RGPD** avec gestion du consentement au formalisme **IAB** au sein d'un **cmp**.
@@ -7,8 +5,4 @@ Gestion des cookies en conformité **RGPD** avec gestion du consentement au form
 
 ## A propos ?
 
-Fait par OF pour la gestion des cookies du groupe SIPA.
-
-## Licence
-
-TODO
+Fait par OuestFrance pour la gestion des cookies du groupe SIPA.
