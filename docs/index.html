@@ -42,6 +42,12 @@
             <button class="btn btn-n2 btn-petit" onclick="document.getElementById('snippet2').select(); document.execCommand('copy');confirm('code copié!');">Copier le code dans le presse papier</button>
         </div>
 
+        <p class="h3 titre-rubrique">Nettoyer toutes les infos stockées: </p>
+        <div class="form">
+            <textarea>localStorage.clear()</textarea>
+            <button class="btn btn-n2" onclick="localStorage.clear()">Nettoyer</button>
+        </div>
+
         <p class="h3 titre-rubrique">Url de la liste globale téléchargée toutes les semaines: </p>
         <div class="form">
             <textarea>https://vendorlist.consensu.org/vendorlist.json</textarea>

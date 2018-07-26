@@ -20,7 +20,7 @@
 - [x] gestion page "mentions legales"
 - [x] gestion injection bandeau
 - [x] fonction globale affichage
-- [ ] fonction evenement scroll
+- [x] fonction evenement scroll
 - [ ] acceptation par famille
 - [ ] gestion affichage rétention
 - [ ] datalay push event cmpChange
