@@ -195,14 +195,16 @@
 
             _consent_token(true);
 
-            // Ecouteur Scroll
-            var evt_scroll = _throttle(function() {
-                if((window.pageYOffset || document.documentElement.scrollTop) > window.innerHeight * .1) { // 10%
-                    consent = _consent(true); // consentement par navigation
-                    window.removeEventListener('scroll', evt_scroll);
-                }
-            }, 200, { trailing: true, leading: true });
-            window.addEventListener('scroll', evt_scroll);
+            if(!window[cn + '_gcda']) {
+                // Ecouteur Scroll
+                var evt_scroll = _throttle(function() {
+                    if((window.pageYOffset || document.documentElement.scrollTop) > window.innerHeight * .1) { // 10%
+                        consent = _consent(true); // consentement par navigation
+                        window.removeEventListener('scroll', evt_scroll);
+                    }
+                }, 200, { trailing: true, leading: true });
+                window.addEventListener('scroll', evt_scroll);
+            }
         }
 
     };
