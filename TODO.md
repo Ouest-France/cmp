@@ -22,6 +22,7 @@
 - [x] fonction globale affichage
 - [ ] fonction evenement scroll
 - [ ] acceptation par famille
+- [ ] gestion affichage rétention
 - [ ] datalay push event cmpChange
 - [ ] push base aws
   
@@ -35,6 +36,8 @@
 - [ ] job concatenation CSS >> JS
 - [ ] job build
 - [ ] job deploiement https://sipaof.mgr.consensu.org/sipa-cmp.min.js
+- [ ] job build doc
+- [ ] job deploiement https://sipaof.mgr.consensu.org/_docs/
 - [ ] installation circle-ci github
 - [ ] licence?
   

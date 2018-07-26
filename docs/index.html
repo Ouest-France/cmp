@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex">
 
-        <link rel="stylesheet" media="all" href="http://oueststrap.ouest-france.fr/dist/css/oueststrap-of-base.css">
-        <link rel="stylesheet" media="screen and (max-width: 979px)" href="http://oueststrap.ouest-france.fr/dist/css/oueststrap-of-small.css">
-        <link rel="stylesheet" media="screen and (min-width: 980px)" href="http://oueststrap.ouest-france.fr/dist/css/oueststrap-of-medium.css">
-        <link rel="stylesheet" media="screen and (min-width: 1280px)" href="http://oueststrap.ouest-france.fr/dist/css/oueststrap-of-large.css">
+    <link rel="stylesheet" media="all" href="http://oueststrap.ouest-france.fr/dist/css/oueststrap-of-base.css">
+    <link rel="stylesheet" media="screen and (max-width: 979px)" href="http://oueststrap.ouest-france.fr/dist/css/oueststrap-of-small.css">
+    <link rel="stylesheet" media="screen and (min-width: 980px)" href="http://oueststrap.ouest-france.fr/dist/css/oueststrap-of-medium.css">
+    <link rel="stylesheet" media="screen and (min-width: 1280px)" href="http://oueststrap.ouest-france.fr/dist/css/oueststrap-of-large.css">
 
-        <link rel="icon" href="http://oueststrap.ouest-france.fr/dist/images/favicon.ico" />
+    <link rel="icon" href="http://oueststrap.ouest-france.fr/dist/images/favicon.ico" />
 
     <script id="sipacmp_loader"></script>
     <script src="/src/cmp.stub.js"></script>
@@ -19,15 +19,33 @@
 <body>
     <div class="container-of">
 
-        <h1>SIPAOF CMP</h1>
-        <p>CMP du groupe SIPA certifiée conforme par l’IAB</p>
+        <h1 class="titre-rubrique">SIPA CMP</h1>
+        <p class="margin-large">CMP du groupe SIPA certifiée conforme par l’IAB</p>
 
-        <p>Code du stub à mettre dans le <code>head</code>:</p>
 
-        <form action="">
-            <textarea style="height: 400px;">&lt;script>!function(e,a,t,c,n){if(a.__cmp=function(){var e=[],c=function(t,c,n){"ping"===t?n&&n({gdprAppliesGlobally:!!(a.__cmp&&a.__cmp.config&&a.__cmp.config.storeConsentGlobally),cmpLoaded:!1}):e.push({command:t,parameter:c,callback:n})};return c.commandQueue=e,c.receiveMessage=function(a){var t=a&&a.data&&a.data.__cmpCall;t&&e.push({command:t.command,parameter:t.parameter,callback:function(e,c){var n={__cmpReturn:{returnValue:e,success:c,callId:t.callId}};a.source.postMessage(msgIsString?JSON.stringify(n):n,"*")}})},(a.attachEvent||a.addEventListener)("message",function(e){a.__cmp.receiveMessage(e)},!1),function e(){if(!a.frames.__cmpLocator)if(t.body){var c=t.createElement("iframe");c.style.display="none",c.name="__cmpLocator",t.body.appendChild(c)}else setTimeout(e,5)}(),c}(),!document.getElementById(n)){var s=t.createElement("script"),r=t.getElementsByTagName("script")[0];s.async=1,s.src="https://sipaof.mgr.consensu.org/sipa-cmp.min.js",s.type="text/javascript",s.id=n,r.parentNode.insertBefore(s,r)}}(0,window,document,0,"sipacmp_loader");&lt;/script></textarea>
-            <button class="btn">Copie javascript ?</button>
-        </form>
+        <p class="h2 titre-rubrique">Code du stub à mettre dans le <code>&lt;head></code>: </p>
+
+        <div class="form">
+            <textarea id="snippet" style="height: 300px;"><script>!function(e,a,t,c,n){if(a.__cmp=function(){var e=[],c=function(t,c,n){"ping"===t?n&&n({gdprAppliesGlobally:!!(a.__cmp&&a.__cmp.config&&a.__cmp.config.storeConsentGlobally),cmpLoaded:!1}):e.push({command:t,parameter:c,callback:n})};return c.commandQueue=e,c.receiveMessage=function(a){var t=a&&a.data&&a.data.__cmpCall;t&&e.push({command:t.command,parameter:t.parameter,callback:function(e,c){var n={__cmpReturn:{returnValue:e,success:c,callId:t.callId}};a.source.postMessage(msgIsString?JSON.stringify(n):n,"*")}})},(a.attachEvent||a.addEventListener)("message",function(e){a.__cmp.receiveMessage(e)},!1),function e(){if(!a.frames.__cmpLocator)if(t.body){var c=t.createElement("iframe");c.style.display="none",c.name="__cmpLocator",t.body.appendChild(c)}else setTimeout(e,5)}(),c}(),!document.getElementById(n)){var s=t.createElement("script"),r=t.getElementsByTagName("script")[0];s.async=1,s.src="https://sipaof.mgr.consensu.org/sipa-cmp.min.js",s.type="text/javascript",s.id=n,r.parentNode.insertBefore(s,r)}}(0,window,document,0,"sipacmp_loader");</script></textarea>
+            <button class="btn btn-n1" onclick="document.getElementById('snippet').select(); document.execCommand('copy');confirm('code copié!');">Copier le code dans le presse papier</button>
+        </div>
+
+        <p class="h3 titre-rubrique">Fonction pour réafficher le bandeau: </p>
+        <div class="form">
+            <textarea>__cmp.show();</textarea>
+            <button class="btn btn-n2" onclick="__cmp.show();">Réafficher le bandeau</button>
+        </div>
+
+        <p class="h3 titre-rubrique">Variable globale pour ne pas compter comme consenement lors de la naviguation: </p>
+        <div class="form">
+            <textarea id="snippet2">&lt;script>window.sipacmp_gcda = true; // _global_consent_doesnt_apply&lt;/script></textarea>
+            <button class="btn btn-n2 btn-petit" onclick="document.getElementById('snippet2').select(); document.execCommand('copy');confirm('code copié!');">Copier le code dans le presse papier</button>
+        </div>
+
+        <p class="h3 titre-rubrique">Url de la liste globale téléchargée toutes les semaines: </p>
+        <div class="form">
+            <textarea>https://vendorlist.consensu.org/vendorlist.json</textarea>
+        </div>
     </div>
 
     <script async src="/src/cmp.js"></script>
