@@ -17,26 +17,64 @@
     !function o(f,u,a){function c(e,t){if(!u[e]){if(!f[e]){var n="function"==typeof require&&require;if(!t&&n)return n(e,!0);if(l)return l(e,!0);var r=new Error("Cannot find module '"+e+"'");throw r.code="MODULE_NOT_FOUND",r}var i=u[e]={exports:{}};f[e][0].call(i.exports,function(t){return c(f[e][1][t]||t)},i,i.exports,o,f,u,a)}return u[e].exports}for(var l="function"==typeof require&&require,t=0;t<a.length;t++)c(a[t]);return c}({1:[function(t,v,e){(function(t){var m="Expected a function",o=NaN,f="[object Symbol]",u=/^\s+|\s+$/g,a=/^[-+]0x[0-9a-f]+$/i,c=/^0b[01]+$/i,l=/^0o[0-7]+$/i,p=parseInt,e="object"==typeof t&&t&&t.Object===Object&&t,n="object"==typeof self&&self&&self.Object===Object&&self,r=e||n||Function("return this")(),s=Object.prototype.toString,w=Math.max,h=Math.min,x=function(){return r.Date.now()};function d(r,i,t){var o,f,u,a,c,l,p=0,s=!1,d=!1,e=!0;if("function"!=typeof r)throw new TypeError(m);function v(t){var e=o,n=f;return o=f=void 0,p=t,a=r.apply(n,e)}function y(t){var e=t-l;return void 0===l||i<=e||e<0||d&&u<=t-p}function b(){var t,e,n=x();if(y(n))return g(n);c=setTimeout(b,(e=i-((t=n)-l),d?h(e,u-(t-p)):e))}function g(t){return c=void 0,e&&o?v(t):(o=f=void 0,a)}function n(){var t,e=x(),n=y(e);if(o=arguments,f=this,l=e,n){if(void 0===c)return p=t=l,c=setTimeout(b,i),s?v(t):a;if(d)return c=setTimeout(b,i),v(l)}return void 0===c&&(c=setTimeout(b,i)),a}return i=O(i)||0,j(t)&&(s=!!t.leading,u=(d="maxWait"in t)?w(O(t.maxWait)||0,i):u,e="trailing"in t?!!t.trailing:e),n.cancel=function(){void 0!==c&&clearTimeout(c),o=l=f=c=void(p=0)},n.flush=function(){return void 0===c?a:g(x())},n}function i(t,e,n){var r=!0,i=!0;if("function"!=typeof t)throw new TypeError(m);return j(n)&&(r="leading"in n?!!n.leading:r,i="trailing"in n?!!n.trailing:i),d(t,e,{leading:r,maxWait:e,trailing:i})}function j(t){var e=typeof t;return!!t&&("object"==e||"function"==e)}function O(t){if("number"==typeof t)return t;if("symbol"==typeof(e=t)||(n=e)&&"object"==typeof n&&s.call(e)==f)return o;var e,n;if(j(t)){var r="function"==typeof t.valueOf?t.valueOf():t;t=j(r)?r+"":r}if("string"!=typeof t)return 0===t?t:+t;t=t.replace(u,"");var i=c.test(t);return i||l.test(t)?p(t.slice(2),i?2:8):a.test(t)?o:+t}v.exports=i,window._throttle=i}).call(this,"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{}]},{},[1]);
 
     var _local_consent = function(name, arg) {
+        // Set
         if(arg != undefined) {
             window.localStorage.setItem(name, JSON.stringify(arg));
             return arg;
+        // Get
         } else {
             return JSON.parse(window.localStorage.getItem(name));
         }
-    }
+    };
     var _consent = function(arg){
-        if(arg === true) {
-            _consent_token(false);
-            __cmp.hide();
+        // Set consent
+        if(arg != undefined) {
+            var d = new Date();
+            d.setTime(d.getTime() + 34128000000); // 13 mois
+            document.cookie = cn + '_consent' + "=" + _consent_family(arg) + ";" + "expires="+ d.toUTCString() + ";path=/";
         }
         return _local_consent(cn+'-consent', arg)
-    }
+    };
     var _consent_token = function(arg){
         return _local_consent(cn+'-consent-token', arg)
-    }
+    };
+    var _consent_family = function(arg){
+        var obj = {
+            "functionning": "000001",
+            "social":       "000010",
+            "advertising":  "000100",
+            "analytics":    "001000",
+            "family":       "010000",
+            "family_2":     "100000",
+        }, family = 0;
 
-    var one_week_time = 7 * 24 * 60 * 60 * 1000;
+        // Encode family
+        if("object" == typeof arg) {
+            Object.keys(obj).map(function(key, index) {
+                family += arg[key] == undefined || arg[key] ? obj[key] >>> 0 : 0;
+            });
+            return parseInt( family, 2 );
+        // Decode family
+        } else if("number" == typeof arg) {
+            arg = arg >>> 0;
 
+            return {
+                "functionning": arg & obj.functionning >>> 0 ? true : false,
+                "social":       arg & obj.social >>> 0 ? true : false,
+                "advertising":  arg & obj.advertising >>> 0 ? true : false,
+                "analytics":    arg & obj.analytics >>> 0 ? true : false,
+                "family":       arg & obj.family >>> 0 ? true : false,
+                "family_2":     arg & obj.family_2 >>> 0 ? true : false,
+            }
+        } else {
+            var ret = {}
+            Object.keys(obj).map(function(key, index) {
+                ret[key] = false;
+            });
+            ret["family"] = ret["family_2"] = true;
+            return ret;
+        }
+    };
     var _init = function (will_revalidate) {
         if(!vendorlist) return;
 
@@ -60,12 +98,13 @@
             consentData.setGlobalVendorList(vendorlist);
         }
         var consent = _consent();
-        consentData.setPurposesAllowed(consent ? vendorlist.purposes.map(function(purpose){return purpose.id}) : []);
-        consentData.setVendorsAllowed(consent ? vendorlist.vendors.map(function(vendor){return vendor.id}) : []);
+            consent = consent ? consent : _consent_family();
+        consentData.setPurposesAllowed(consent.functionning ? vendorlist.purposes.map(function(purpose){return purpose.id}) : []);
+        consentData.setVendorsAllowed(consent.functionning ? vendorlist.vendors.map(function(vendor){return vendor.id}) : []);
 
 
         if(will_revalidate) {
-            console.log('computeConsentString', consentData);
+            // console.log('computeConsentString', consentData);
             window.localStorage.setItem(cn+'-consent-data', consentData.getConsentString());
         }
 
@@ -134,7 +173,6 @@
         __cmp.consent = _consent;
         __cmp._create_banner = function() {
             if(__cmp.div_banner) return;
-            var $ = document.querySelectorAll;
             // CSS
             var styleEl = document.createElement('style');
             styleEl.innerHTML = '.scmp-popin,.scmp-popin .scmp-actions,.scmp-popin .scmp-overlay{position:fixed;bottom:0;left:0;right:0}body.scmp-no-scroll{overflow:hidden}.scmp-hidden{display:none!important}.scmp-popin{max-height:100vh}.scmp-popin .scmp-overlay{background:rgba(0,0,0,.6);top:0;z-index:-1}.scmp-popin .scmp-content{background:#fff;max-height:100vh;overflow:auto;padding:20px 20px 66px;box-shadow:0 0 8px 0 rgba(135,135,135,.5)}.scmp-popin *{font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666;box-sizing:border-box}.scmp-popin a,.scmp-popin a:hover{color:#666}.scmp-popin .scmp-title{font-weight:800;font-size:16px;color:#333;margin-bottom:12px}.scmp-text{line-height:1.3}.scmp-popin .scmp-strong{font-weight:800}.scmp-popin .scmp-margin-bottom-small{margin-bottom:7px}.scmp-popin .scmp-margin-bottom{margin-bottom:18px}.scmp-popin .scmp-actions{padding:20px;background:#fff}.scmp-popin .scmp-button{display:inline-block;text-align:center;font-size:14px;height:34px;line-height:34px;padding:0 20px}.scmp-popin .scmp-button-n1{color:#fff;font-weight:700;text-decoration:none;border-radius:3px;background:#e2001a}.scmp-popin .scmp-button-n1:hover{color:#fff;background:#b40015}.scmp-popin .scmp-list-parameters{display:table;width:100%;padding:0;margin:12px 0 18px;list-style:none}.scmp-popin .scmp-list-parameters li{padding:22px 55px 10px 0;position:relative;border-bottom:1px solid #d4d4d4}.scmp-popin .scmp-list-parameters li:last-child{border-bottom:none}.scmp-popin .scmp-list-parameters [type=checkbox]{position:absolute;left:-9999px}.scmp-popin .scmp-list-parameters label{font-weight:800;color:#333;cursor:pointer;display:block;position:absolute;top:8px;right:0;bottom:5px;left:0}.scmp-popin .scmp-list-parameters label:after,.scmp-popin .scmp-list-parameters label:before{content:"";display:block;position:absolute;top:50%;transform:translateY(-50%);border-radius:100px}.scmp-popin .scmp-list-parameters label:before{width:40px;height:24px;right:0;background:#3AAA35}.scmp-popin .scmp-list-parameters [type=checkbox]:not(:checked)+label:before{background:#878787}.scmp-popin .scmp-list-parameters label:after{width:20px;height:20px;right:2px;background:#fff;transition:right .3s ease}.scmp-popin .scmp-list-parameters [type=checkbox]:not(:checked)+label:after{right:18px}.scmp-popin .scmp-list-parameters [type=checkbox]:disabled+label:before{opacity:.5}@media screen and (min-width:45em){.scmp-popin *{font-size:14px}.scmp-popin .scmp-title{font-size:18px}}@media screen and (min-width:45em) and (orientation :landscape){.scmp-popin .scmp-max-width{max-width:620px}}@media screen and (min-width:60em){.scmp-popin .scmp-content{padding:30px 0}.scmp-container{width:960px;margin-right:auto;margin-left:auto;padding-left:40px;padding-right:10px}.scmp-max-width{max-width:740px}.scmp-popin .scmp-margin-bottom{margin-bottom:29px}.scmp-popin .scmp-actions{position:static;padding:23px 0 0}.scmp-popin .scmp-button{font-size:16px;height:44px;line-height:44px;padding:0 33px}.scmp-popin .scmp-list-parameters{margin:20px 0 0}.scmp-popin .scmp-list-parameters li{padding-top:25px}}@media screen and (min-width:80em){.scmp-popin .scmp-container{width:1280px;padding-left:65px}.scmp-popin .scmp-list-parameters li{padding-right:65px}.scmp-popin .scmp-list-parameters label:before{width:50px;height:26px}.scmp-popin .scmp-list-parameters [type=checkbox]:checked+label:after{right:3px}.scmp-popin .scmp-list-parameters [type=checkbox]:not(:checked)+label:after{right:27px}}@media screen and (max-width:21em) and (max-height:41.563em){.scmp-popin.scmp-parameters-open .scmp-actions{box-shadow:0 0 8px 0 rgba(135,135,135,.5)}}@media screen and (max-height:29.125em){.scmp-popin.scmp-parameters-open .scmp-actions{box-shadow:0 0 8px 0 rgba(135,135,135,.5)}}';
@@ -142,8 +180,15 @@
 
             // HTML
             __cmp.div_banner = document.createElement('div');
-            __cmp.div_banner.innerHTML = '<div role="dialog" id="scmp-popin" class="scmp-popin"> <div id="scmp-overlay" class="scmp-overlay scmp-hidden"></div><div class="scmp-content"> <div class="scmp-container"> <div class="scmp-title scmp-max-width">Ce site utilise des cookies.</div><div class="scmp-text scmp-margin-bottom-small scmp-max-width">En poursuivant votre navigation sur ce site, vous acceptez notre <a href="https://www.ouest-france.fr/politiquedeprotectiondesdonneespersonnelles/" target="_blank" data-trkcmp="lien données personnelles">politique de protection des données personnelles</a> et notre <a href="https://www.ouest-france.fr/politiquedeprotectiondesdonneespersonnelles/" target="_blank" data-trkcmp="lien cookies">politique cookies</a>, ainsi que le dépôt de cookies et technologies similaires destinés à réaliser des statistiques visant à évaluer le trafic et l’utilisation des services sur notre site, vous proposer des services éditoriaux et des publicités adaptés à vos centres d’intérêts et vous permettre de partager des contenus sur les réseaux sociaux.</div><div id="scmp-parameters" class="scmp-hidden"> <div class="scmp-text scmp-margin-bottom-small scmp-max-width">Les cookies garantissent une expérience de navigation optimale.</div><div class="scmp-margin-bottom-small scmp-max-width">Cliquez sur chaque catégorie pour activer ou désactiver l\'utilisation des cookies. Le bouton de couleur indique si les cookies sont actifs (vert) ou inactifs (gris).</div><ul class="scmp-list-parameters scmp-max-width"> <li> <input type="checkbox" id="fonctionnement" name="consent" value="fonctionnement" disabled checked> <label for="fonctionnement">Fontionnement</label> <div>Ces cookies garantissent le fonctionnement du site et permettent son optimisation.</div></li><li> <input type="checkbox" id="webanalytics" name="consent" value="webanalytics" checked> <label for="webanalytics">Web Analytics</label> <div>Ces cookies permettent le suivi anonyme et agrégé des outils de Web Analytics.</div></li><li> <input type="checkbox" id="social" name="consent" value="social" checked> <label for="social">Social</label> <div>Ces cookies vous permettent d’interagir avec les modules sociaux présents sur le site.</div></li><li> <input type="checkbox" id="publicite" name="consent" value="publicite" checked> <label for="publicite">Publicité</label> <div>Ces cookies permettent de mieux cibler les publicités qui vous sont proposées sur Internet.</div></li></ul> </div><div id="scmp-confirmation" class="scmp-hidden"> <div class="scmp-title scmp-margin-bottom-small scmp-max-width">Êtes-vous sûr de vouloir refuser les cookies publicitaires&nbsp;?</div><div class="scmp-margin-bottom-small scmp-max-width">En refusant ces cookies, nous ne pourrons pas personnaliser la publicité qui sera présentée sur le site, qui sera ainsi moins pertinente.</div><ul class="scmp-list-parameters scmp-max-width"> <li> <input type="checkbox" id="publicite" name="consent" value="publicite" checked> <label for="publicite">Publicité</label> <div>Ces cookies permettent de mieux cibler les publicités qui vous sont proposées sur Internet.</div></li></ul> </div><div class="scmp-actions"> <a id="scmp-btn-validation" href="javascript:;" role="button" class="scmp-button scmp-button-n1">J\'accepte</a> <a id="scmp-btn-parameters" href="javascript:;" class="scmp-button">Je paramètre</a> </div></div></div></div>';
+            __cmp.div_banner.innerHTML = '<div role="dialog" id="scmp-popin" class="scmp-popin"> <div id="scmp-overlay" class="scmp-overlay scmp-hidden"></div><div class="scmp-content"> <div class="scmp-container"> <div class="scmp-title scmp-max-width">Ce site utilise des cookies.</div><div class="scmp-text scmp-margin-bottom-small scmp-max-width">En poursuivant votre navigation sur ce site, vous acceptez notre <a href="https://www.ouest-france.fr/politiquedeprotectiondesdonneespersonnelles/" target="_blank" data-trkcmp="lien données personnelles">politique de protection des données personnelles</a> et notre <a href="https://www.ouest-france.fr/politiquedeprotectiondesdonneespersonnelles/" target="_blank" data-trkcmp="lien cookies">politique cookies</a>, ainsi que le dépôt de cookies et technologies similaires destinés à réaliser des statistiques visant à évaluer le trafic et l’utilisation des services sur notre site, vous proposer des services éditoriaux et des publicités adaptés à vos centres d’intérêts et vous permettre de partager des contenus sur les réseaux sociaux.</div><div id="scmp-parameters" class="scmp-hidden"> <div class="scmp-text scmp-margin-bottom-small scmp-max-width">Les cookies garantissent une expérience de navigation optimale.</div><div class="scmp-margin-bottom-small scmp-max-width">Cliquez sur chaque catégorie pour activer ou désactiver l\'utilisation des cookies. Le bouton de couleur indique si les cookies sont actifs (vert) ou inactifs (gris).</div><ul class="scmp-list-parameters scmp-max-width"> <li> <input type="checkbox" id="fonctionnement" data-consent-family="functionning" value="fonctionnement" disabled checked> <label for="fonctionnement">Fontionnement</label> <div>Ces cookies garantissent le fonctionnement du site et permettent son optimisation.</div></li><li> <input type="checkbox" id="webanalytics" data-consent-family="analytics" value="webanalytics" checked> <label for="webanalytics">Web Analytics</label> <div>Ces cookies permettent le suivi anonyme et agrégé des outils de Web Analytics.</div></li><li> <input type="checkbox" id="social" data-consent-family="social" value="social" checked> <label for="social">Social</label> <div>Ces cookies vous permettent d’interagir avec les modules sociaux présents sur le site.</div></li><li> <input type="checkbox" id="publicite" data-consent-family="advertising" value="publicite" checked> <label for="publicite">Publicité</label> <div>Ces cookies permettent de mieux cibler les publicités qui vous sont proposées sur Internet.</div></li></ul> </div><div id="scmp-confirmation" class="scmp-hidden"> <div class="scmp-title scmp-margin-bottom-small scmp-max-width">Êtes-vous sûr de vouloir refuser les cookies publicitaires&nbsp;?</div><div class="scmp-margin-bottom-small scmp-max-width">En refusant ces cookies, nous ne pourrons pas personnaliser la publicité qui sera présentée sur le site, qui sera ainsi moins pertinente.</div><ul class="scmp-list-parameters scmp-max-width"> <li> <input type="checkbox" id="publicite" name="consent" value="publicite" checked> <label for="publicite">Publicité</label> <div>Ces cookies permettent de mieux cibler les publicités qui vous sont proposées sur Internet.</div></li></ul> </div><div class="scmp-actions"> <a id="scmp-btn-validation" href="javascript:;" role="button" class="scmp-button scmp-button-n1">J\'accepte</a> <a id="scmp-btn-parameters" href="javascript:;" class="scmp-button">Je paramètre</a> </div></div></div></div>';
             document.body.appendChild(__cmp.div_banner);
+
+            // set checkbox
+            document.querySelectorAll('input[data-consent-family]').forEach(function(el){
+                el.setAttribute('checked', consent[el.getAttribute('data-consent-family')]);
+                el.checked = consent[el.getAttribute('data-consent-family')];
+            });
+
 
             document.querySelector('#scmp-btn-parameters').addEventListener('click', function(){
 
@@ -156,13 +201,26 @@
                 document.body.classList.add('scmp-no-scroll');
             });
             document.querySelector('#scmp-btn-validation').addEventListener('click', function(){
+                [].map.call(document.querySelectorAll('#scmp-parameters, #scmp-confirmation'), function(elem) {
+                    elem.classList.add('scmp-hidden');
+                });
                 __cmp.hide();
-                __cmp.consent(true);
+
+                document.querySelectorAll('input[data-consent-family]').forEach(function(el){
+                    consent[el.getAttribute('data-consent-family')] = el.checked;
+                });
+
+                __cmp.consent(consent);
             });
         };
         __cmp.hide = function() {
             if(!__cmp.div_banner) return;
 
+            document.querySelector('#scmp-popin').classList.remove('scmp-parameters-open');
+
+            [].map.call(document.querySelectorAll('#scmp-parameters, #scmp-overlay'), function(elem) {
+                elem.classList.add('scmp-hidden');
+            });
             document.querySelector('#scmp-popin').classList.add('scmp-hidden'),
             document.body.classList.remove('scmp-no-scroll');
         };
@@ -170,6 +228,9 @@
             __cmp._create_banner();
 
             document.getElementById('scmp-popin').classList.remove('scmp-hidden');
+                [].map.call(document.querySelectorAll('#scmp-popin, #scmp-btn-parameters'), function(elem) {
+                    elem.classList.remove('scmp-hidden');
+                });
         };
 
         // Exemple d'appels:
@@ -184,12 +245,14 @@
 
         // consentement par navigation
         if(_consent_token() && !window[cn + '_gcda']) { // _global_consent_doesnt_apply
-            console.log('consent nav')
-            consent = _consent(true);
+            // console.log('consent nav')
+            consent = _consent({}); // consent all
+            _consent_token(false);
+            __cmp.hide();
         }
 
         // CMP Bandeau
-        if(consent == undefined) {
+        if(consent == undefined || !consent.functionning) {
             // affiche bandeau
             __cmp.show();
 
@@ -199,7 +262,10 @@
                 // Ecouteur Scroll
                 var evt_scroll = _throttle(function() {
                     if((window.pageYOffset || document.documentElement.scrollTop) > window.innerHeight * .1) { // 10%
-                        consent = _consent(true); // consentement par navigation
+                        consent = _consent({}); // consentement par Scroll
+                        _consent_token(false);
+                        __cmp.hide();
+
                         window.removeEventListener('scroll', evt_scroll);
                     }
                 }, 200, { trailing: true, leading: true });
@@ -213,7 +279,7 @@
         var local_vendorlist = JSON.parse(window.localStorage.getItem(cn+'-vendorlist'));
 
         // On stocke la liste qu'une semaine en local storage
-        if(!local_vendorlist || ((new Date()).getTime() - window.localStorage.getItem(cn+'-vendorlist-update') > one_week_time)) {
+        if(!local_vendorlist || ((new Date()).getTime() - window.localStorage.getItem(cn+'-vendorlist-update') > 604800000)) { // 7 jours
 
             var xhr = new XMLHttpRequest();
             xhr.open('GET', u, true);

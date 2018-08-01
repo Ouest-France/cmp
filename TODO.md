@@ -21,7 +21,7 @@
 - [x] gestion injection bandeau
 - [x] fonction globale affichage
 - [x] fonction evenement scroll
-- [ ] acceptation par famille
+- [x] acceptation par famille
 - [ ] gestion affichage rétention
 - [ ] datalay push event cmpChange
 - [ ] push base aws
