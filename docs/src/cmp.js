@@ -38,6 +38,25 @@
     var _consent_token = function(arg){
         return _local_consent(cn+'-consent-token', arg)
     };
+    var _consent_uuid = function(arg){
+        var uuid = _local_consent(cn+'-consent-uuid');
+
+        if(!uuid) {
+            uuid = '';
+            var i, random;
+            for (i = 0; i < 32; i++) {
+                random = Math.random() * 16 | 0;
+
+                if (i == 8 || i == 12 || i == 16 || i == 20) {
+                    uuid += '-';
+                }
+                uuid += (i == 12 ? 4 : (i == 16 ? (random & 3 | 8) : random)).toString(16);
+            }
+            _local_consent(cn+'-consent-uuid', uuid);
+        }
+
+        return uuid;
+    };
     var _consent_family = function(arg){
         var obj = {
             "functionning": "000001",
@@ -66,14 +85,15 @@
                 "family":       arg & obj.family >>> 0 ? true : false,
                 "family_2":     arg & obj.family_2 >>> 0 ? true : false,
             }
-        } else {
-            var ret = {}
-            Object.keys(obj).map(function(key, index) {
-                ret[key] = false;
-            });
-            ret["family"] = ret["family_2"] = true;
-            return ret;
         }
+        // else {
+        //     var ret = {}
+        //     Object.keys(obj).map(function(key, index) {
+        //         ret[key] = false;
+        //     });
+        //     ret["family"] = ret["family_2"] = true;
+        //     return ret;
+        // }
     };
     var _init = function (will_revalidate) {
         if(!vendorlist) return;
@@ -98,7 +118,7 @@
             consentData.setGlobalVendorList(vendorlist);
         }
         var consent = _consent();
-            consent = consent ? consent : _consent_family();
+            consent = consent ? consent : _consent_family(63);
         consentData.setPurposesAllowed(consent.functionning ? vendorlist.purposes.map(function(purpose){return purpose.id}) : []);
         consentData.setVendorsAllowed(consent.functionning ? vendorlist.vendors.map(function(vendor){return vendor.id}) : []);
 
@@ -110,6 +130,7 @@
 
         // Prépare les appels stockés avant le chargement de la cmp
         var _cmpStub_commandQueue = window.__cmp.commandQueue;
+        window.dataLayer = window.dataLayer || [];
 
         // CMP IAB
         window.__cmp = function(command, parameter, cb) {
@@ -148,6 +169,10 @@
                         cmpLoaded: true
                     }, true);
                 },
+                'getUserData': function(parameter, callback){
+
+                    callback({'consentData': consentData.getConsentString(), 'uuid': _consent_uuid()}, true);
+                }
             };
             return cmp[command](parameter, cb);
         };
@@ -206,14 +231,12 @@
                 [].map.call(document.querySelectorAll('#scmp-parameters, #scmp-confirmation'), function(elem) {
                     elem.classList.add('scmp-hidden');
                 });
-                __cmp.hide();
 
                 document.querySelectorAll('input[data-consent-family]').forEach(function(el){
                     consent[el.getAttribute('data-consent-family')] = el.checked;
                 });
 
-                __cmp.consent(consent);
-                dataLayer.push({'event':sipacmp+'Change'});
+                consent = __cmp.save_consent(consent);
             });
         };
         __cmp.hide = function() {
@@ -235,6 +258,25 @@
                     elem.classList.remove('scmp-hidden');
                 });
         };
+        __cmp.save_consent = function(consent) {
+            consent = __cmp.consent(consent);
+            _consent_token(false);
+            __cmp.hide();
+            dataLayer.push({'event':cn+'Change'});
+
+            __cmp('getUserData', null, function(ret){
+                var request = new XMLHttpRequest();
+
+                request.open('POST', 'https://cmp.aws-sipa.ouest-france.fr/' + (window.location.hostname.indexOf('www') != '-1' ? 'prod' : 'staging') + '/v1/cmp', true);
+                request.setRequestHeader('Content-Type', 'application/json');
+                request.send(JSON.stringify({
+                    "consentString": ret.consentData,
+                    "utilisateurId": ret.uuid
+                }));
+            });
+            return consent;
+        };
+
 
         // Exemple d'appels:
         // window.__cmp('ping', {}, function(e){ console.log(e) })
@@ -249,14 +291,11 @@
         // consentement par navigation
         if(_consent_token() && !window[cn + '_gcda']) { // _global_consent_doesnt_apply
             // console.log('consent nav')
-            consent = _consent({}); // consent all
-            _consent_token(false);
-            __cmp.hide();
-            dataLayer.push({'event':sipacmp+'Change'});
+           consent = __cmp.save_consent({}); // consent all
         }
 
         // CMP Bandeau
-        if(consent == undefined || !consent.functionning) {
+        if(consent == undefined || document.cookie.indexOf(cn + '_consent=') === -1) {
             // affiche bandeau
             __cmp.show();
 
@@ -266,10 +305,7 @@
                 // Ecouteur Scroll
                 var evt_scroll = _throttle(function() {
                     if((window.pageYOffset || document.documentElement.scrollTop) > window.innerHeight * .1) { // 10%
-                        consent = _consent({}); // consentement par Scroll
-                        _consent_token(false);
-                        __cmp.hide();
-                        dataLayer.push({'event':sipacmp+'Change'});
+                        consent = __cmp.save_consent({}); // consentement par Scroll
 
                         window.removeEventListener('scroll', evt_scroll);
                     }
@@ -277,7 +313,7 @@
                 window.addEventListener('scroll', evt_scroll);
             }
         } else {
-            dataLayer.push({'event':sipacmp+'Change'});
+            dataLayer.push({'event':cn+'Change'});
         }
 
     };

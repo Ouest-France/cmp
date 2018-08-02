@@ -24,7 +24,7 @@
 - [x] acceptation par famille
 - [ ] gestion affichage rétention
 - [x] datalay push event cmpChange
-- [ ] push base aws
+- [x] push base aws
   
 
 ### Industrialisation
