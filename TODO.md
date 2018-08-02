@@ -22,7 +22,7 @@
 - [x] fonction globale affichage
 - [x] fonction evenement scroll
 - [x] acceptation par famille
-- [ ] gestion affichage rétention
+- [x] gestion affichage rétention
 - [x] datalay push event cmpChange
 - [x] push base aws
   
@@ -48,7 +48,8 @@
 - [ ] génération automatique DOC de code  
 - [ ] écriture d'une doc fonctionnelle?  
 - [ ] logo projet?  
-- [ ] variables de configuration?  
-    - [ ] pourcentage scroll  
+- [x] variables de configuration?  
+    - [x] pourcentage scroll  
+    - [x] libellé + liens
     - [ ] storeConsentGloball  
   
