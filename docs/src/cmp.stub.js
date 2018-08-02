@@ -12,7 +12,7 @@
             if (command === 'ping') {
                 if (callback) {
                     callback({
-                        gdprAppliesGlobally: !!(w.__cmp && w.__cmp.config && w.__cmp.config.storeConsentGlobally),
+                        gdprAppliesGlobally: !!(cmp && cmp.config && cmp.config.storeConsentGlobally),
                         cmpLoaded: false
                     });
                 }
@@ -25,6 +25,7 @@
             }
         }
         cmp.commandQueue = commandQueue;
+        cmp.config = w.__cmp && w.__cmp.config ? w.__cmp.config : {};
 
         // Création de l'écouteur pour que les pubs DANS des iframes puissent communiquer avec notre CMP
         // CF norme IAB :
@@ -64,7 +65,7 @@
                     frame.name = '__cmpLocator';
                     doc.body.appendChild(frame);
                 } else {
-                    setTimeout(addLocatorFrame, 5);
+                    setTimeout(addLocatorFrame, 50);
                 }
             }
         }

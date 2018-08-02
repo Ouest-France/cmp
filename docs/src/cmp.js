@@ -222,9 +222,10 @@
 
                 document.querySelector('#scmp-popin').classList.add('scmp-parameters-open');
 
-                [].map.call(document.querySelectorAll('#scmp-parameters, #scmp-overlay, #scmp-btn-parameters'), function(elem) {
-                    elem.classList.toggle('scmp-hidden');
-                });
+                document.querySelector('#scmp-btn-parameters').classList.add('scmp-hidden');
+
+                document.querySelector('#scmp-parameters').classList.remove('scmp-hidden');
+                document.querySelector('#scmp-overlay').classList.remove('scmp-hidden');
 
                 document.body.classList.add('scmp-no-scroll');
             });
@@ -241,7 +242,7 @@
                     document.querySelector('#scmp-confirmation').classList.add('scmp-hidden');
 
                     document.querySelector('#scmp-description').classList.remove('scmp-hidden');
-                    document.querySelector('#scmp-header').classList.remove('scmp-hidden');;
+                    document.querySelector('#scmp-header').classList.remove('scmp-hidden');
 
                     document.querySelector('.scmp-list-parameters').classList.remove('retention');
 
@@ -250,9 +251,16 @@
                     return;
                 }
                 if(!consent.advertising) {
+                    document.querySelector('#scmp-popin').classList.add('scmp-parameters-open');
+
+
+                    document.querySelector('#scmp-parameters').classList.remove('scmp-hidden');
+                    document.querySelector('#scmp-overlay').classList.remove('scmp-hidden');
+                    document.querySelector('#scmp-confirmation').classList.remove('scmp-hidden');
+
+                    document.querySelector('#scmp-btn-parameters').classList.add('scmp-hidden');
                     document.querySelector('#scmp-description').classList.add('scmp-hidden');
                     document.querySelector('#scmp-header').classList.add('scmp-hidden');
-                    document.querySelector('#scmp-confirmation').classList.remove('scmp-hidden');
 
 
                     document.querySelector('.scmp-list-parameters').classList.add('retention');
@@ -266,10 +274,10 @@
 
             document.querySelector('#scmp-popin').classList.remove('scmp-parameters-open');
 
-            [].map.call(document.querySelectorAll('#scmp-parameters, #scmp-overlay'), function(elem) {
-                elem.classList.add('scmp-hidden');
-            });
-            document.querySelector('#scmp-popin').classList.add('scmp-hidden'),
+            document.querySelector('#scmp-parameters').classList.add('scmp-hidden');
+            document.querySelector('#scmp-overlay').classList.add('scmp-hidden');
+            document.querySelector('#scmp-popin').classList.add('scmp-hidden');
+
             document.body.classList.remove('scmp-no-scroll');
         };
         __cmp.show = function() {
@@ -324,7 +332,7 @@
             if(!window[cn + '_gcda']) {
                 // Ecouteur Scroll
                 var evt_scroll = _throttle(function() {
-                    if((window.pageYOffset || document.documentElement.scrollTop) > window.innerHeight * .1) { // 10%
+                    if((window.pageYOffset || document.documentElement.scrollTop) > window.innerHeight * (_config.scrollPercent != undefined ? _config.scrollPercent : .1)) { // 10%
                         consent = __cmp.save_consent({}); // consentement par Scroll
 
                         window.removeEventListener('scroll', evt_scroll);

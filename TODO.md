@@ -51,5 +51,5 @@
 - [x] variables de configuration?  
     - [x] pourcentage scroll  
     - [x] libellé + liens
-    - [ ] storeConsentGloball  
+    - [x] storeConsentGloball  
   
