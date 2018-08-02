@@ -189,7 +189,7 @@
                 el.checked = consent[el.getAttribute('data-consent-family')];
             });
 
-
+            // Gestion affichage parametres
             document.querySelector('#scmp-btn-parameters').addEventListener('click', function(){
 
                 document.querySelector('#scmp-popin').classList.add('scmp-parameters-open');
@@ -200,6 +200,8 @@
 
                 document.body.classList.add('scmp-no-scroll');
             });
+
+            // Consentement par click
             document.querySelector('#scmp-btn-validation').addEventListener('click', function(){
                 [].map.call(document.querySelectorAll('#scmp-parameters, #scmp-confirmation'), function(elem) {
                     elem.classList.add('scmp-hidden');
@@ -211,6 +213,7 @@
                 });
 
                 __cmp.consent(consent);
+                dataLayer.push({'event':sipacmp+'Change'});
             });
         };
         __cmp.hide = function() {
@@ -249,6 +252,7 @@
             consent = _consent({}); // consent all
             _consent_token(false);
             __cmp.hide();
+            dataLayer.push({'event':sipacmp+'Change'});
         }
 
         // CMP Bandeau
@@ -265,12 +269,15 @@
                         consent = _consent({}); // consentement par Scroll
                         _consent_token(false);
                         __cmp.hide();
+                        dataLayer.push({'event':sipacmp+'Change'});
 
                         window.removeEventListener('scroll', evt_scroll);
                     }
                 }, 200, { trailing: true, leading: true });
                 window.addEventListener('scroll', evt_scroll);
             }
+        } else {
+            dataLayer.push({'event':sipacmp+'Change'});
         }
 
     };

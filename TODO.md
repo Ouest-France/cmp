@@ -23,7 +23,7 @@
 - [x] fonction evenement scroll
 - [x] acceptation par famille
 - [ ] gestion affichage rétention
-- [ ] datalay push event cmpChange
+- [x] datalay push event cmpChange
 - [ ] push base aws
   
 
