@@ -1,6 +1,9 @@
 version: 2
 jobs:
   build:
+    branches:
+      only:
+        - master
     docker:
       - image: circleci/node
     steps:
@@ -10,15 +13,16 @@ jobs:
           command: yarn install
       - run:
           name: Packaging
-          command: node_modules/gulp/bin/gulp.js
+          command: npx gulp
       - run:
           name: Deploy
-          command: ./.circleci/ftp.sh
+          command: node .circleci/ftp.js
 workflows:
   version: 2
-  build-and-deploy:
+  deploy:
     jobs:
-      - build
-        filters:
-          branches:
-            only: master
+      - build:
+          filters:
+            branches:
+              only:
+                - master
