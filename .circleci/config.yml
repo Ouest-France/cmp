@@ -14,9 +14,3 @@ jobs:
       - run:
           name: Deploy
           command: ./.circleci/ftp.sh
-
-workflows:
-  version: 2
-  build-and-deploy:
-    jobs:
-      - build
