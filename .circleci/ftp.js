@@ -7,10 +7,9 @@ ftp.deploy({
     host: process.env.FTP_HOST,
     port: 21,
     localRoot: __dirname + "/../dist/",
-    remoteRoot: "/sipaof/sipacmp",
+    remoteRoot: "/sipaof/" + process.env.FTP_ENV,
     include: [
-        '*.html',
-        'js/*.js'
+        '*'
     ],
     exclude: []
 }, function(err) {
