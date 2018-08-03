@@ -11,26 +11,28 @@ var   gulp            = require("gulp")
     , replace         = require('gulp-replace')
     , log             = require('fancy-log')
     , es              = require('event-stream')
+    , fs              = require('fs')
+    , minify         = require('html-minifier').minify
     ;
 
 // Variables de chemins
-var source = './src/assets'; // dossier de travail
+var source = './src'; // dossier de travail
 var destination = './dist'; // dossier à livrer
 var build = './build'; // dossier de compilation
-var static = '../server/src/main/resources/static/'; // dossier de compilation
 
 scsslist =
     [
-        [source + '/scss/main-algolia.scss', 'main-algolia.min.css']
+        [source + '/scss/main.scss', 'sipa-cmp.min.css']
     ]
 ;
 jslist =
     [
-        [source + '/js/app.js', 'app-algolia.min.js']
+        [source + '/js/cmp.js', 'sipa-cmp.min.js'], // nom du fichier référencé dans cmp.stub.js
+        [source + '/js/cmp.stub.js', 'sipa-cmp.stub.min.js']
     ]
 ;
 
-gulp.task('make-sass', ['clean-css', 'clean'], function () {
+gulp.task('make-sass', ['clean'], function () {
     return es.merge(scsslist.map(function(a) {
         return gulp.src(a[0])
             .pipe(plumber(function(e){log.error('Erreur lors de la compilation SASS !', e);}))
@@ -38,12 +40,20 @@ gulp.task('make-sass', ['clean-css', 'clean'], function () {
             .pipe(sass())
             .pipe(sourcemaps.write())
             .pipe(rename(a[1]))
-            .pipe(gulp.dest(build + '/css/dev'))
             .pipe(cssnano({zindex: false}))
             .pipe(gulp.dest(build + '/css/min'));
     }));
 });
-gulp.task('compile-js', ['clean-js', 'clean'], function () {
+function htmlmin(html){
+    return minify(html, {collapseWhitespace: true});
+}
+gulp.task('compile-js', ['clean-js', 'make-sass', 'clean'], function () {
+    var CMPCONSENTSRING = fs.readFileSync(source + '/js/cmp.consentstring.js', "utf8");
+    var CMPTHROTTLE = fs.readFileSync(source + '/js/cmp.throttle.js', "utf8");
+    var CMPCSS = fs.readFileSync(build + '/css/min/sipa-cmp.min.css', "utf8");
+    var CMPHTML = htmlmin(fs.readFileSync(source + '/template/cmp.html', "utf8"));
+    var CMPTEXT = htmlmin(fs.readFileSync(source + '/template/cmp_text.html', "utf8"));
+
     return es.merge(jslist.map(function(a) {
         return gulp.src(a[0])
             .pipe(plumber(function(e){log.error('Erreur lors de la compression JS!', e);}))
@@ -55,6 +65,11 @@ gulp.task('compile-js', ['clean-js', 'clean'], function () {
                     ]
                 }))
                 .on('error', console.log)
+            .pipe(replace('##CMPCONSENTSRING##', CMPCONSENTSRING))
+            .pipe(replace('##CMPTHROTTLE##', CMPTHROTTLE))
+            .pipe(replace('##CMPCSS##', CMPCSS))
+            .pipe(replace('##CMPHTML##', CMPHTML))
+            .pipe(replace('##CMPTEXT##', CMPTEXT))
             .pipe(rename(a[1]))
             .pipe(gulp.dest(build +"/js/dev"))
             .pipe(plumber(function(e){log.error('Erreur lors de la minification JS!', e);}))
@@ -62,18 +77,10 @@ gulp.task('compile-js', ['clean-js', 'clean'], function () {
             .pipe(gulp.dest(build +"/js/min"));
     }));
 });
-gulp.task('move-dev-assets', ['make-dev-assets', 'clean'], function () {
-    return gulp.src([destination + '/**/*'])
-        .pipe(gulp.dest(static + '/'));
-});
 
-gulp.task("make-css-dev", ["make-sass"], function() {
-    return gulp.src([build + '/css/dev/**/*'])
-        .pipe(gulp.dest(destination + '/css'));
-});
-gulp.task("make-css-prod", ["make-sass"], function() {
-    return gulp.src([build + '/css/min/**/*'])
-        .pipe(gulp.dest(destination + '/css'));
+gulp.task("documentation", ['clean'], function() {
+    return gulp.src(['./docs/**/*'])
+        .pipe(gulp.dest(destination + '/'));
 });
 gulp.task("make-js-dev", ['compile-js', 'clean-js', 'clean'], function() {
     return gulp.src([build + '/js/dev/**/*'])
@@ -84,19 +91,15 @@ gulp.task("make-js-prod", ['compile-js', 'clean-js', 'clean'], function() {
         .pipe(gulp.dest(destination + '/js'));
 });
 
-gulp.task("clean-css", function() {
-    return del([
-        destination + '/**/*.css'
-    ]);
-});
 gulp.task("clean-js", function() {
     return del([
         destination + '/**/*.js'
     ]);
 });
-gulp.task("clean", ["clean-js", "clean-css"], function(){
+gulp.task("clean", ["clean-js"], function(){
     return del([
-        build + '/**/*'
+        build + '/*',
+        destination + '/*',
     ]);
 });
 
@@ -105,17 +108,17 @@ gulp.task("clean", ["clean-js", "clean-css"], function(){
 // Commandes utiles ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 gulp.task("watch", function() {
-    gulp.start('move-dev-assets');
+    gulp.start('make-dev-assets');
     watch( [
             source + '/scss/**/*.scss',
             source + '/js/**/*.js',
         ], function(){
-        gulp.start('move-dev-assets');
+        gulp.start('make-dev-assets');
 
     });
 });
 
-gulp.task("make-dev-assets", ["clean", "make-sass", "make-css-dev", "make-js-dev"]);
-gulp.task("make-prod-assets", ["clean", "make-sass", "make-css-prod", "make-js-prod"]);
-gulp.task("default", ["clean", "make-prod-assets"]);
-gulp.task("build-dev", ["clean", "make-dev-assets", "move-dev-assets"]);
+gulp.task("make-dev-assets", ["clean", "make-sass", "make-js-dev"]);
+gulp.task("make-prod-assets", ["clean", "make-sass", "make-js-prod"]);
+gulp.task("default", ["clean", "make-prod-assets", "documentation"]);
+gulp.task("build-dev", ["clean", "make-dev-assets", "documentation"]);
