@@ -28,17 +28,17 @@
   
 
 ### Industrialisation
-- [ ] yarn
-- [ ] requires gulp
-- [ ] job concatenation
-- [ ] job minification JS
-- [ ] job minification CSS
-- [ ] job concatenation CSS >> JS
-- [ ] job build
-- [ ] job deploiement https://sipaof.mgr.consensu.org/sipa-cmp.min.js
-- [ ] job build doc
-- [ ] job deploiement https://sipaof.mgr.consensu.org/_docs/
+- [x] yarn
+- [x] requires gulp
+- [x] job concatenation
+- [x] job minification JS
+- [x] job minification CSS
+- [x] job concatenation CSS >> JS
+- [x] job build
+- [x] job build doc
 - [ ] installation circle-ci github
+- [ ] job deploiement https://sipaof.mgr.consensu.org/sipa-cmp.min.js
+- [ ] job deploiement https://sipaof.mgr.consensu.org/_docs/
 - [ ] licence?
   
 ## NICE
