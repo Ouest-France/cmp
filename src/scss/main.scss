@@ -1,0 +1,265 @@
+body.scmp-no-scroll {
+    overflow: hidden;
+}
+.scmp-popin {
+    .scmp-hidden,
+    &.scmp-hidden {
+        display: none !important;
+    }
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 100vh;
+    .scmp-overlay {
+        background: rgba(0,0,0, .6);
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        z-index: -1;
+    }
+    .scmp-content {
+        background: #fff;
+        max-height: 100vh;
+        overflow: auto;
+        padding: 20px 20px 66px;
+        box-shadow: 0 0 8px 0 rgba(135,135,135, .5);
+    }
+    * {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        color: #666;
+        box-sizing: border-box;
+    }
+
+    a,
+    a:hover {
+        color: #666;
+    }
+
+    .scmp-title {
+        font-weight: 800;
+        font-size: 16px;
+        color: #333;
+        margin-bottom: 12px;
+    }
+    .scmp-text {
+        line-height: 1.3;
+    }
+    .scmp-strong {
+        font-weight: 800;
+    }
+
+    .scmp-margin-bottom-small {
+        margin-bottom: 7px;
+    }
+    .scmp-margin-bottom {
+        margin-bottom: 18px;
+    }
+
+    .scmp-actions {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 20px;
+        background: #fff;
+    }
+    .scmp-button {
+        text-decoration: underline;
+        background: #fff;
+        border: 0;
+        display: inline-block;
+        text-align: center;
+        font-size: 14px;
+        height: 34px;
+        line-height: 34px;
+        padding: 0 20px;
+        &:hover {
+            text-decoration: none;
+            cursor: pointer;
+        }
+    }
+    .scmp-button-n1 {
+        text-decoration: none;
+        color: #fff;
+        font-weight: 700;
+        text-decoration: none;
+        border-radius: 3px;
+        background: #e2001a;
+        &:hover,
+        &:focus {
+            text-decoration: none;
+            color: #fff;
+            background: #b40015;
+        }
+    }
+
+    .scmp-list-parameters {
+        display: table;
+        width: 100%;
+        padding: 0;
+        margin: 12px 0 18px;
+        list-style: none;
+        li {
+            padding: 22px 55px 10px 0;
+            position: relative;
+            border-bottom: 1px solid #d4d4d4;
+        }
+        &.retention li {
+            display: none;
+            &.retention {
+                display: block;
+            }
+        }
+        li:last-child {
+            border-bottom: none;
+        }
+        [type="checkbox"] {
+            position: absolute;
+            left: -9999px;
+        }
+        label {
+            font-weight: 800;
+            color: #333;
+            cursor: pointer;
+            display: block;
+            position: absolute;
+            top: 8px;
+            right: 0;
+            bottom: 5px;
+            left: 0;
+            &:before {
+                content: "";
+                display: block;
+                width: 40px;
+                height: 24px;
+                position: absolute;
+                right: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                background: #3AAA35;
+                border-radius: 100px;
+            }
+        }
+        [type="checkbox"]:not(:checked) + label:before {
+            background: #878787;
+        }
+        label:after {
+            content: "";
+            display: block;
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            right: 2px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #fff;
+            border-radius: 100px;
+            transition: right .3s ease;
+        }
+        [type="checkbox"]:not(:checked) + label:after {
+            right: 18px;
+        }
+        [type="checkbox"]:disabled + label:before {
+            opacity: .5;
+        }
+    }
+}
+
+/* Largeur min 720px */
+@media screen and (min-width: 45em) {
+    .scmp-popin {
+        * {
+            font-size: 14px;
+        }
+        .scmp-title {
+            font-size: 18px;
+        }
+    }
+}
+
+/* Largeur min 720px et paysage */
+@media screen and (min-width: 45em) and (orientation : landscape) {
+    .scmp-popin .scmp-max-width {
+        max-width: 620px;
+    }
+}
+
+/* Largeur min 960px */
+@media screen and (min-width: 60em) {
+    .scmp-popin {
+        .scmp-content {
+            padding: 30px 0;
+        }
+        .scmp-container {
+            width: 960px;
+            margin-right: auto;
+            margin-left: auto;
+            padding-left: 40px;
+            padding-right: 10px;
+        }
+        .scmp-max-width {
+            max-width: 740px;
+        }
+        .scmp-margin-bottom {
+            margin-bottom: 29px;
+        }
+        .scmp-actions {
+            position: static;
+            padding: 23px 0 0;
+        }
+        .scmp-button {
+            font-size: 16px;
+            height: 44px;
+            line-height: 44px;
+            padding: 0 33px;
+        }
+        .scmp-list-parameters {
+            margin: 20px 0 0;
+            li {
+                padding-top: 25px;
+            }
+        }
+    }
+}
+
+/* Largeur min 1280 */
+@media screen and (min-width: 80em) {
+    .scmp-popin {
+        .scmp-container {
+            width: 1280px;
+            padding-left: 65px;
+        }
+        .scmp-list-parameters {
+            li {
+                padding-right: 65px;
+            }
+            label:before {
+                width: 50px;
+                height: 26px;
+            }
+            [type="checkbox"]:checked + label:after {
+                right: 3px;
+            }
+            [type="checkbox"]:not(:checked) + label:after {
+                right: 27px;
+            }
+        }
+    }
+}
+
+/* largeur max 336 et hauteur max 665 */
+@media screen and (max-width: 21em) and (max-height: 41.563em) {
+    .scmp-popin.scmp-parameters-open .scmp-actions {
+        box-shadow: 0 0 8px 0 rgba(135,135,135, .5);
+    }
+}
+/* hauteur max 466 */
+@media screen and (max-height: 29.125em) {
+    .scmp-popin.scmp-parameters-open .scmp-actions {
+        box-shadow: 0 0 8px 0 rgba(135,135,135, .5);
+    }
+}
