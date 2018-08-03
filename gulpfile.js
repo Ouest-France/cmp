@@ -12,7 +12,7 @@ var   gulp            = require("gulp")
     , log             = require('fancy-log')
     , es              = require('event-stream')
     , fs              = require('fs')
-    , minify         = require('html-minifier').minify
+    , minify          = require('html-minifier').minify
     ;
 
 // Variables de chemins
@@ -78,8 +78,14 @@ gulp.task('compile-js', ['clean-js', 'make-sass', 'clean'], function () {
     }));
 });
 
-gulp.task("documentation", ['clean'], function() {
-    return gulp.src(['./docs/**/*'])
+gulp.task("documentation", ['html', 'oueststrap', 'clean']);
+gulp.task("html", ['clean'], function() {
+    return gulp.src(['./docs/**/*.html'])
+        .pipe(replace('../build/js', process.env.FTP_ENV || '../build/js'))
+        .pipe(gulp.dest(destination + '/'));
+});
+gulp.task("oueststrap", ['clean'], function() {
+    return gulp.src(['./docs/**/*', '!./docs/**/*.html'])
         .pipe(gulp.dest(destination + '/'));
 });
 gulp.task("make-js-dev", ['compile-js', 'clean-js', 'clean'], function() {

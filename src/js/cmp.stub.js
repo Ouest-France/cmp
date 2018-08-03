@@ -85,4 +85,4 @@
         s.parentNode.insertBefore(e, s);
     }
 
-})('sipacmp', window, document, 'https://sipaof.mgr.consensu.org/sipa-cmp.min.js', 'sipacmp_loader');
+})('sipacmp', window, document, 'https://sipaof.mgr.consensu.org/sipacmp/sipa-cmp.min.js', 'sipacmp_loader');
