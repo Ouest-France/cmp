@@ -70,6 +70,7 @@ gulp.task('compile-js', ['clean-js', 'make-sass', 'clean'], function () {
             .pipe(replace('##CMPCSS##', CMPCSS))
             .pipe(replace('##CMPHTML##', CMPHTML))
             .pipe(replace('##CMPTEXT##', CMPTEXT))
+            .pipe(replace('https://sipaof.mgr.consensu.org/sipacmp/sipa-cmp.min.js', 'https://sipaof.mgr.consensu.org/'+(process.env.FTP_ENV || 'sipacmp')+'/sipa-cmp.min.js'))
             .pipe(rename(a[1]))
             .pipe(gulp.dest(build +"/js/dev"))
             .pipe(plumber(function(e){log.error('Erreur lors de la minification JS!', e);}))
@@ -81,7 +82,7 @@ gulp.task('compile-js', ['clean-js', 'make-sass', 'clean'], function () {
 gulp.task("documentation", ['html', 'oueststrap', 'clean']);
 gulp.task("html", ['clean'], function() {
     return gulp.src(['./docs/**/*.html'])
-        .pipe(replace('../build/js', process.env.FTP_ENV || '../build/js'))
+        .pipe(replace('../build/js/dev', process.env.FTP_ENV ? 'js' : '../build/js'))
         .pipe(gulp.dest(destination + '/'));
 });
 gulp.task("oueststrap", ['clean'], function() {
