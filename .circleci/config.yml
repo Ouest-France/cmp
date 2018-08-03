@@ -1,19 +1,19 @@
 version: 2
 jobs:
   build:
+    filters:
+      branches:
+        only:
+          - master
     docker:
       - image: circleci/node
     steps:
       - checkout
-      - run:
-          name: Installation
-          command: yarn install
-      - run:
-          name: Packaging
-          command: node_modules/gulp/bin/gulp.js
+      - run: pwd
+      - run: ls -la ./.circleci
       - run:
           name: Deploy
-          command: ./ftp.sh
+          command: ./.circleci/ftp.sh
 
 workflows:
   version: 2
