@@ -3,7 +3,7 @@ HOST=${FTP_HOST}
 USER=${FTP_USER}
 PASSWD=${FTP_PWD}
 
-cd ../dist
+cd ./dist
 ftp -n $HOST <<END_SCRIPT
 quote USER $USER
 quote PASS $PASSWD
