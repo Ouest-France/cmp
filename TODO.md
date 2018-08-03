@@ -36,9 +36,9 @@
 - [x] job concatenation CSS >> JS
 - [x] job build
 - [x] job build doc
-- [ ] installation circle-ci github
-- [ ] job deploiement https://sipaof.mgr.consensu.org/sipa-cmp.min.js
-- [ ] job deploiement https://sipaof.mgr.consensu.org/_docs/
+- [x] installation circle-ci github
+- [x] job deploiement https://sipaof.mgr.consensu.org/sipa-cmp.min.js
+- [x] job deploiement https://sipaof.mgr.consensu.org/_docs/
 - [ ] licence?
   
 ## NICE
