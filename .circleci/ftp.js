@@ -15,5 +15,5 @@ ftp.deploy({
     exclude: []
 }, function(err) {
     if (err) console.log(err)
-    else console.log('finished');
+    else console.log('finished :)');
 });
