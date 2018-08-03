@@ -1,8 +1,10 @@
 version: 2
 jobs:
-  build:
+  build-prod:
     docker:
       - image: circleci/node
+    environment:
+      FTP_ENV: sipacmp
     steps:
       - checkout
       - run:
@@ -11,39 +13,38 @@ jobs:
       - run:
           name: Packaging
           command: npx gulp
-  deploy:
-    steps:
       - run:
           name: Deploy
           command: node .circleci/ftp.js
-    environment:
-      FTP_ENV: sipacmp
-  deploy-qual:
-    steps:
-      - run:
-          name: Deploy
-          command: node .circleci/ftp.js
+  build-staging:
+    docker:
+      - image: circleci/node
     environment:
       FTP_ENV: sipacmp-qual
+    steps:
+      - checkout
+      - run:
+          name: Installation
+          command: yarn install
+      - run:
+          name: Packaging
+          command: npx gulp
+      - run:
+          name: Deploy
+          command: node .circleci/ftp.js
 workflows:
   version: 2
-  deploy:
+  build-and-deploy:
     jobs:
-      - build:
-          filters:
-            branches:
-              only:
-                - master
-      - deploy:
-          requires:
-            - build
-  deploy-qual:
+      - build-prod
+    filters:
+      branches:
+        only:
+          - master
+  staging:
     jobs:
-      - build:
-          filters:
-            branches:
-              only:
-                - develop
-      - deploy-qual:
-          requires:
-            - build
+      - build-staging
+    filters:
+      branches:
+        only:
+          - develop
