@@ -17,12 +17,14 @@
             return JSON.parse(window.localStorage.getItem(name));
         }
     };
+    var top_domain = location.hostname.split('.').reverse();
+    top_domain = top_domain[1].length > 2 ? "." + top_domain[1] + "." + top_domain[0] : location.hostname;
     var _consent = function(arg){
         // Set consent
         if(arg != undefined) {
             var d = new Date();
             d.setTime(d.getTime() + 34128000000); // 13 mois
-            document.cookie = cn + '_consent' + "=" + _consent_family(arg) + ";" + "expires="+ d.toUTCString() + ";path=/";
+            document.cookie = cn + '_consent' + "=" + _consent_family(arg) + ";expires="+ d.toUTCString() + ";domain=" + top_domain + ";path=/";
         }
         return _local_consent(cn+'-consent', arg)
     };
