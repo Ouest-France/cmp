@@ -333,8 +333,6 @@
                 }, 200, { trailing: true, leading: true });
                 window.addEventListener('scroll', evt_scroll);
             }
-        } else {
-            dataLayer.push({'event':cn+'Change'});
         }
 
     };
