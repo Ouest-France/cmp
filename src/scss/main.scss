@@ -5,12 +5,16 @@ body.scmp-no-scroll {
     .scmp-hidden,
     &.scmp-hidden {
         display: none !important;
+        opacity: 0;
+        max-height: 0;
+        transition:max-height 0.3s ease-out;
     }
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     max-height: 100vh;
+    transition:max-height 0.3s ease-out;
     .scmp-overlay {
         background: rgba(0,0,0, .6);
         position: fixed;
@@ -19,6 +23,8 @@ body.scmp-no-scroll {
         right: 0;
         top: 0;
         z-index: -1;
+        opacity: 1;
+        transition: opacity 2s ease-in-out;
     }
     .scmp-content {
         background: #fff;

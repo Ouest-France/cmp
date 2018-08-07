@@ -125,7 +125,7 @@ gulp.task("watch", function() {
     });
 });
 
-gulp.task("make-dev-assets", ["clean", "make-sass", "make-js-dev"]);
-gulp.task("make-prod-assets", ["clean", "make-sass", "make-js-prod"]);
-gulp.task("default", ["clean", "make-prod-assets", "documentation"]);
-gulp.task("build-dev", ["clean", "make-dev-assets", "documentation"]);
+gulp.task("make-dev-assets", ["clean", "make-sass", "make-js-dev", "documentation"]);
+gulp.task("make-prod-assets", ["clean", "make-sass", "make-js-prod", "documentation"]);
+gulp.task("default", ["clean", "make-prod-assets"]);
+gulp.task("build-dev", ["clean", "make-dev-assets"]);
