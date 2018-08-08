@@ -55,8 +55,8 @@
 
         <p class="h3 titre-rubrique">Nettoyer toutes les infos stockées: </p>
         <div class="form">
-            <textarea>localStorage.clear();document.cookie = 'sipacmp_consent=;expires=Thu, 01 Jan 1970 00:00:00 GMT;';</textarea>
-            <button class="btn btn-n2" onclick="localStorage.clear();document.cookie = 'sipacmp_consent=;expires=Thu, 01 Jan 1970 00:00:00 GMT;';">Nettoyer</button>
+            <textarea>localStorage.clear();var top = location.hostname.split('.').reverse();top = top[1].length > 2 ? "." + top[1] + "." + top[0] : location.hostname;document.cookie = 'sipacmp_consent=;expires=Thu, 01 Jan 1970 00:00:00 GMT;';</textarea>
+            <button class="btn btn-n2" onclick="localStorage.clear();var top = location.hostname.split('.').reverse();top = top[1].length > 2 ? '.' + top[1] + '.' + top[0] : location.hostname;document.cookie = 'sipacmp_consent=;expires=Thu, 01 Jan 1970 00:00:00 GMT;domain=' + top + ';path=/;'">Nettoyer</button>
         </div>
 
         <p class="h3 titre-rubrique">Paramètrage: </p>

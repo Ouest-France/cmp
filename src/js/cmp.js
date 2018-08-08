@@ -317,7 +317,7 @@
         // consentement par navigation
         if(_consent_token() && !window[cn + '_gcda']) { // _global_consent_doesnt_apply
             // console.log('consent nav')
-           consent = __cmp.save_consent({}); // consent all
+           consent = __cmp.save_consent(_consent_family(63)); // consent all
         }
 
         // CMP Bandeau
@@ -331,7 +331,7 @@
                 // Ecouteur Scroll
                 var evt_scroll = _throttle(function() {
                     if((window.pageYOffset || document.documentElement.scrollTop) > window.innerHeight * (_config.scrollPercent != undefined ? _config.scrollPercent : .1)) { // 10%
-                        consent = __cmp.save_consent({}); // consentement par Scroll
+                        consent = __cmp.save_consent(_consent_family(63)); // consentement par Scroll
 
                         window.removeEventListener('scroll', evt_scroll);
                     }
