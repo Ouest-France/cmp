@@ -29,7 +29,9 @@ body.scmp-no-scroll {
         opacity: 1;
     }
     .scmp-content {
-        background: #fff;
+        background: #fff;;
+        max-height: 100vh;
+        overflow: auto;
         padding: 20px 20px 66px;
         box-shadow: 0 0 8px 0 rgba(135,135,135, .5);
     }
