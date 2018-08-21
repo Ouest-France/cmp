@@ -98,7 +98,7 @@
             // console.log('revalidate')
             consentData = new __cmpConsentString();
             // Modify the consent data
-            consentData.setCmpId(0);
+            consentData.setCmpId(85);
             consentData.setConsentScreen(1);
             consentData.setCmpVersion(1);
             consentData.setGlobalVendorList(vendorlist);
