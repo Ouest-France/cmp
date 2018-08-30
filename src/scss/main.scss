@@ -8,6 +8,7 @@ body.scmp-no-scroll {
     left: 0;
     right: 0;
     max-height: 100rem;
+    z-index: 1001;
     .scmp-parameters,
     .scmp-content {
         transition: all 0.3s cubic-bezier(0.53, 0.01, 0.36, 1.63);

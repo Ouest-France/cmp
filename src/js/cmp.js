@@ -303,17 +303,6 @@
             return consent;
         };
 
-
-        // Exemple d'appels:
-        // window.__cmp('ping', {}, function(e){ console.log(e) })
-        // window.__cmp('getConsentData', {}, function(e){ console.log(e) })
-        // window.__cmp('getVendorConsents', {}, function(e){ console.log(e) })
-
-        // Joue les appels stockés avant le chargement de la cmp
-        (_cmpStub_commandQueue || []).forEach(function(param) {
-            __cmp(param.command, param.parameter || null, param.callback || function(){return null;});
-        });
-
         // consentement par navigation
         if(_consent_token() && !window[cn + '_gcda']) { // _global_consent_doesnt_apply
             // console.log('consent nav')
@@ -340,6 +329,15 @@
             }
         }
 
+        // Exemple d'appels:
+        // window.__cmp('ping', {}, function(e){ console.log(e) })
+        // window.__cmp('getConsentData', {}, function(e){ console.log(e) })
+        // window.__cmp('getVendorConsents', {}, function(e){ console.log(e) })
+
+        // Joue les appels stockés avant le chargement de la cmp
+        (_cmpStub_commandQueue || []).forEach(function(param) {
+            __cmp(param.command, param.parameter || null, param.callback || function(){return null;});
+        });
     };
 
     var vendorlist = (function (u) {
