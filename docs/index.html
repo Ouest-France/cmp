@@ -53,6 +53,20 @@
             <button class="btn btn-n2 btn-petit" onclick="document.getElementById('snippet2').select(); document.execCommand('copy');confirm('code copié!');">Copier le code dans le presse papier</button>
         </div>
 
+
+        <p class="h3 titre-rubrique">Récupérer le consentement à la pub: </p>
+        <div class="form">
+            <textarea id="snippet3" style="height: 250px;">&lt;script>__cmp('getConsentData', {}, function(e){
+    var consent = __cmp.consent();
+    if(consent && consent.advertising){
+        console.log('pub acceptée')
+    } else {
+        console.log('pub pas acceptée')
+    }
+});&lt;/script></textarea>
+            <button class="btn btn-n2 btn-petit" onclick="document.getElementById('snippet3').select(); document.execCommand('copy');confirm('code copié!');">Copier le code dans le presse papier</button>
+        </div>
+
         <p class="h3 titre-rubrique">Nettoyer toutes les infos stockées: </p>
         <div class="form">
             <textarea>localStorage.clear();var top = location.hostname.split('.').reverse();top = top[1].length > 2 ? "." + top[1] + "." + top[0] : location.hostname;document.cookie = 'sipacmp_consent=;expires=Thu, 01 Jan 1970 00:00:00 GMT;';</textarea>
