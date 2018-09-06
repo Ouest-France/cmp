@@ -178,15 +178,15 @@
             // Si c'est un message cmp (dont l'objet __cmpCall éxiste)
             if (data) {
                 __cmp(
-                    command: data.command,
-                    parameter: data.parameter,
-                    callback: function(retValue, success) {
+                    data.command,
+                    data.parameter,
+                    function(retValue, success) {
                         var returnMsg = {"__cmpReturn": {
                             "returnValue": retValue,
                             "success": success,
                             "callId": data.callId
                         }};
-                        event.source.postMessage(msgIsString ? JSON.stringify(returnMsg) : returnMsg, '*');
+                        event.source.postMessage(returnMsg, '*');
                     }
                 );
             }
