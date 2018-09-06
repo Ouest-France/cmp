@@ -168,7 +168,9 @@
                     callback({'consentData': consentData.getConsentString(), 'uuid': _consent_uuid()}, true);
                 }
             };
-            return cmp[command](parameter, cb);
+            if(typeof cmp[command] == 'function') {
+                return cmp[command](parameter, cb);
+            }
         };
         // Surcharge de la fonction message
         __cmp.receiveMessage = function(event) {
