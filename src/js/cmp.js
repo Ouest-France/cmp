@@ -177,7 +177,7 @@
             var data = event && event.data && event.data.__cmpCall;
             // Si c'est un message cmp (dont l'objet __cmpCall éxiste)
             if (data) {
-                __cmp({
+                __cmp(
                     command: data.command,
                     parameter: data.parameter,
                     callback: function(retValue, success) {
@@ -188,7 +188,7 @@
                         }};
                         event.source.postMessage(msgIsString ? JSON.stringify(returnMsg) : returnMsg, '*');
                     }
-                });
+                );
             }
         };
         __cmp.consent = _consent;
