@@ -191,7 +191,7 @@
                 );
             }
         };
-        __cmp._config = _config;
+        __cmp.config = _config;
         __cmp.consent = _consent;
         __cmp._create_banner = function() {
             if(__cmp.div_banner) return;
