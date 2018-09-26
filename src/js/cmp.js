@@ -124,6 +124,7 @@
         // Prépare les appels stockés avant le chargement de la cmp
         var _cmpStub_commandQueue = window.__cmp.commandQueue;
         var _config = (window.__cmp && window.__cmp.config ? window.__cmp.config : {});
+        var _cb_getUserConsent = [];
         window.dataLayer = window.dataLayer || [];
 
         // CMP IAB
@@ -166,6 +167,13 @@
                 'getUserData': function(parameter, callback){
 
                     callback({'consentData': consentData.getConsentString(), 'uuid': _consent_uuid()}, true);
+                },
+                'getUserConsent': function(parameter, callback){
+                    var c = _consent();
+                    if(c == null) {
+                        return _cb_getUserConsent.push(Promise.resolve(callback));
+                    }
+                    callback({'consent': c}, true);
                 }
             };
             if(typeof cmp[command] == 'function') {
@@ -302,6 +310,12 @@
                     "consentString": ret.consentData,
                     "utilisateurId": ret.uuid
                 }));
+            });
+
+            _cb_getUserConsent.map(function(el){
+                el.then(function(callback){
+                    callback({'consent': _consent()}, true);
+                });
             });
             return consent;
         };

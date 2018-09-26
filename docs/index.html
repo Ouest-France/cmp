@@ -29,7 +29,6 @@
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
     <div class="container-of">
-
         <h1 class="titre-rubrique">SIPA CMP</h1>
         <p class="margin-large">CMP du groupe SIPA certifiée conforme par l’IAB</p>
 
@@ -54,17 +53,36 @@
         </div>
 
 
-        <p class="h3 titre-rubrique">Récupérer le consentement à la pub: </p>
-        <div class="form">
-            <textarea id="snippet3" style="height: 250px;">&lt;script>__cmp('getConsentData', {}, function(e){
-    var consent = __cmp.consent();
-    if(consent && consent.advertising){
-        console.log('pub acceptée')
-    } else {
-        console.log('pub pas acceptée')
-    }
-});&lt;/script></textarea>
-            <button class="btn btn-n2 btn-petit" onclick="document.getElementById('snippet3').select(); document.execCommand('copy');confirm('code copié!');">Copier le code dans le presse papier</button>
+        <div class="row">
+            <div class="col-sm-12">
+                <p class="h3 titre-rubrique">Récupérer l'état actuel du consentement à la pub: </p>
+                <div class="form">
+                    <textarea id="snippet3" style="height: 250px;">&lt;script>__cmp('getConsentData', {}, function(e){
+            var consent = __cmp.consent();
+            if(consent && consent.advertising){
+                console.log('pub acceptée')
+            } else {
+                console.log('pub pas acceptée')
+            }
+        });&lt;/script></textarea>
+                    <button class="btn btn-n2 btn-petit" onclick="document.getElementById('snippet3').select(); document.execCommand('copy');confirm('code copié!');">Copier le code dans le presse papier</button>
+                </div>
+
+            </div>
+            <div class="col-sm-12">
+                <p class="h3 titre-rubrique">Récupérer le consentement reçu (attente validation) à la pub: </p>
+                <div class="form">
+                    <textarea id="snippet4" style="height: 250px;">&lt;script>__cmp('getUserConsent', {}, function(e){
+        if(e.consent && e.consent.advertising){
+            console.log('bandeau vu et pub acceptée')
+        } else {
+            console.log('bandeau vu et pub refusée')
+        }
+    });&lt;/script></textarea>
+                    <button class="btn btn-n2 btn-petit" onclick="document.getElementById('snippet4').select(); document.execCommand('copy');confirm('code copié!');">Copier le code dans le presse papier</button>
+                </div>
+
+            </div>
         </div>
 
         <p class="h3 titre-rubrique">Nettoyer toutes les infos stockées: </p>
