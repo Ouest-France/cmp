@@ -300,6 +300,9 @@
             _consent_token(false);
             __cmp.hide();
             dataLayer.push({'event':cn+'Change'});
+            if(window.evt_scroll) {
+                window.removeEventListener('scroll', evt_scroll);
+            }
 
             __cmp('getUserData', null, function(ret){
                 var request = new XMLHttpRequest();
@@ -335,7 +338,7 @@
 
             if(!window[cn + '_gcda']) {
                 // Ecouteur Scroll
-                var evt_scroll = _throttle(function() {
+                window.evt_scroll = _throttle(function() {
                     if((window.pageYOffset || document.documentElement.scrollTop) > window.innerHeight * (_config.scrollPercent != undefined ? _config.scrollPercent : .1)) { // 10%
                         consent = __cmp.save_consent(_consent_family(63)); // consentement par Scroll
 
