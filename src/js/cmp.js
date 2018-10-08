@@ -1,6 +1,9 @@
 ;(function(cn){
     if(!window.localStorage) return;
 
+    // polyfill
+    window.NodeList&&!NodeList.prototype.forEach&&(NodeList.prototype.forEach=function(o,t){t=t||window;for(var i=0;i<this.length;i++)o.call(t,this[i],i,this)});
+
     // La sdk consent string est requise par le composant sipacmp
     ##CMPCONSENTSRING##
 
@@ -308,9 +311,9 @@
                 var status = xhr.status;
                 if (status === 200) {
 
-                    vendorlist = xhr.response;
+                    vendorlist = typeof xhr.response == "object" ? xhr.response : JSON.parse(xhr.response);
                     window.localStorage.setItem(cn+'-vendorlist-update', (new Date()).getTime());
-                    window.localStorage.setItem(cn+'-vendorlist', JSON.stringify(xhr.response));
+                    window.localStorage.setItem(cn+'-vendorlist', JSON.stringify(vendorlist));
 
                     _init(true);
                 }

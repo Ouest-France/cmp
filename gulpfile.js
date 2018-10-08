@@ -2,7 +2,7 @@ var   gulp            = require("gulp")
     , del             = require("del")
     , include         = require("gulp-include")
     , rename          = require("gulp-rename")
-    , uglify          = require("gulp-uglify")
+    , uglify          = require("gulp-terser")
     , sass            = require("gulp-sass")
     , watch           = require("gulp-watch")
     , sourcemaps      = require('gulp-sourcemaps')
@@ -13,6 +13,9 @@ var   gulp            = require("gulp")
     , es              = require('event-stream')
     , fs              = require('fs')
     , minify          = require('html-minifier').minify
+    , webpack         = require('webpack')
+    , webpackStream   = require('webpack-stream')
+    , webpackConfig   = require("./webpack.config.js");
     ;
 
 // Variables de chemins
@@ -32,6 +35,12 @@ jslist =
     ]
 ;
 
+gulp.task('webpack', ['clean'], function() {
+    return gulp.src('./src/js/cmp.consentstring.js')
+        .pipe(webpackStream(webpackConfig), webpack)
+        .pipe(gulp.dest('./build/js/lib'));
+});
+
 gulp.task('make-sass', ['clean'], function () {
     return es.merge(scsslist.map(function(a) {
         return gulp.src(a[0])
@@ -47,8 +56,8 @@ gulp.task('make-sass', ['clean'], function () {
 function htmlmin(html){
     return minify(html, {collapseWhitespace: true});
 }
-gulp.task('compile-js', ['clean-js', 'make-sass', 'clean'], function () {
-    var CMPCONSENTSRING = fs.readFileSync(source + '/js/cmp.consentstring.js', "utf8");
+gulp.task('compile-js', ['clean-js', 'make-sass', 'webpack', 'clean'], function () {
+    var CMPCONSENTSRING = fs.readFileSync(build + '/js/lib/cmp.consentstring.js', "utf8");
     var CMPTHROTTLE = fs.readFileSync(source + '/js/cmp.throttle.js', "utf8");
     var CMPCSS = fs.readFileSync(build + '/css/min/sipa-cmp.min.css', "utf8");
     var CMPHTML = htmlmin(fs.readFileSync(source + '/template/cmp.html', "utf8"));
@@ -109,7 +118,6 @@ gulp.task("clean", ["clean-js"], function(){
         destination + '/*',
     ]);
 });
-
 
 //
 // Commandes utiles ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
