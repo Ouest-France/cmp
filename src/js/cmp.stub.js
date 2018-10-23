@@ -43,7 +43,7 @@
                             "success": success,
                             "callId": data.callId
                         }};
-                        event.source.postMessage(msgIsString ? JSON.stringify(returnMsg) : returnMsg, '*');
+                        event.source.postMessage(returnMsg, '*');
                     }
                 });
             }
@@ -75,7 +75,7 @@
     }());
 
     // Ajout du "gros" script cmp complet en asynchrone
-    if (!document.getElementById(script_id)) {
+    if (!doc.getElementById(script_id)) {
         var e = doc.createElement("script"),
             s = doc.getElementsByTagName("script")[0];
         e.async = 1;
@@ -85,4 +85,4 @@
         s.parentNode.insertBefore(e, s);
     }
 
-})('sipacmp', window, document, 'https://sipaof.mgr.consensu.org/sipacmp/sipa-cmp.min.js', 'sipacmp_loader');
+})('sipacmp', window, document, 'https://sipaof.mgr.consensu.org/sipacmp/js/sipa-cmp.min.js', 'sipacmp_loader');

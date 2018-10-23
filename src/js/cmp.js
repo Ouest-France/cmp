@@ -154,7 +154,7 @@
         }
     };
     // Surcharge de la fonction message
-    __cmp.receiveMessage = function(event) {
+    window.__cmp.receiveMessage = function(event) {
         var data = event && event.data && event.data.__cmpCall;
         // Si c'est un message cmp (dont l'objet __cmpCall éxiste)
         if (data) {
@@ -172,9 +172,9 @@
             );
         }
     };
-    __cmp.config = _config;
-    __cmp.consent = _consent;
-    __cmp._create_banner = function() {
+    window.__cmp.config = _config;
+    window.__cmp.consent = _consent;
+    window.__cmp._create_banner = function() {
         if(__cmp.div_banner) return;
         // CSS
         var styleEl = document.createElement('style');
@@ -253,7 +253,7 @@
             }
         });
     };
-    __cmp.hide = function() {
+    window.__cmp.hide = function() {
         if(!__cmp.div_banner) return;
 
         document.querySelector('#scmp-popin').classList.remove('scmp-parameters-open');
@@ -264,12 +264,12 @@
 
         document.body.classList.remove('scmp-no-scroll');
     };
-    __cmp.show = function() {
+    window.__cmp.show = function() {
         __cmp._create_banner();
         document.getElementById('scmp-popin').classList.remove('scmp-hidden');
         document.getElementById('scmp-btn-parameters').classList.remove('scmp-hidden');
     };
-    __cmp.save_consent = function(consent) {
+    window.__cmp.save_consent = function(consent) {
         consent = __cmp.consent(consent);
         _consent_token(false);
         __cmp.hide();
