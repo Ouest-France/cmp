@@ -2,7 +2,7 @@ version: 2
 jobs:
   build-prod:
     docker:
-      - image: circleci/node
+      - image: circleci/node:10
     environment:
       FTP_ENV: sipacmp
     steps:
@@ -18,7 +18,7 @@ jobs:
           command: node .circleci/ftp.js
   build-staging:
     docker:
-      - image: circleci/node
+      - image: circleci/node:10
     environment:
       FTP_ENV: sipacmp-qual
     steps:
