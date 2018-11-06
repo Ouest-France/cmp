@@ -317,7 +317,7 @@
 
                     // consentement par top domain (localstorage undefined mais cookie OK)
                     if(consent == undefined && document.cookie.indexOf(cn + '_consent=') > -1) {
-                        var cookieconsent = ("; " + document.cookie).split("; " + cn + '_consent=')[0].split(";")[1] * 1;
+                        var cookieconsent = ("; " + document.cookie).split("; " + cn + '_consent=')[1].split(";")[0] * 1;
                         consent = _consent_family(cookieconsent); // same consent
 
                         _init(true);
