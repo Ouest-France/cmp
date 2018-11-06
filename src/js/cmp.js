@@ -167,7 +167,7 @@
                         "success": success,
                         "callId": data.callId
                     }};
-                    event.source.postMessage(returnMsg, '*');
+                    (event.source || window).postMessage(returnMsg, '*');
                 }
             );
         }
