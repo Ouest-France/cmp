@@ -316,6 +316,11 @@
                     window.localStorage.setItem(cn+'-vendorlist', JSON.stringify(vendorlist));
 
                     _init(true);
+
+                    // consentement par top domain (localstorage undefined mais cookie OK)
+                    if(consent == undefined && document.cookie.indexOf(cn + '_consent=') > -1) {
+                        consent = __cmp.save_consent(_consent_family(("; " + document.cookie).split("; " + cn + '_consent=')[0].split(";")[1])); // same consent
+                    }
                 }
             };
 
@@ -376,11 +381,11 @@
     // consentement par navigation
     if(_consent_token() && !window[cn + '_gcda']) { // _global_consent_doesnt_apply
         // console.log('consent nav')
-       consent = __cmp.save_consent(_consent_family(63)); // consent all
+        consent = __cmp.save_consent(_consent_family(63)); // consent all
     }
 
     // CMP Bandeau
-    if(consent == undefined || document.cookie.indexOf(cn + '_consent=') === -1) {
+    if(consent == undefined && document.cookie.indexOf(cn + '_consent=') === -1) {
         // affiche bandeau
         __cmp.show();
 
