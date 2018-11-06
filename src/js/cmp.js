@@ -139,7 +139,7 @@
             },
             'getUserData': function(parameter, callback){
 
-                callback({'consentData': consentData.getConsentString(), 'uuid': _consent_uuid()}, true);
+                callback({'consentData': (consentData || window.localStorage.getItem(cn+'-consent-data')).getConsentString(), 'uuid': _consent_uuid()}, true);
             },
             'getUserConsent': function(parameter, callback){
                 var c = _consent();
@@ -315,11 +315,18 @@
                     window.localStorage.setItem(cn+'-vendorlist-update', (new Date()).getTime());
                     window.localStorage.setItem(cn+'-vendorlist', JSON.stringify(vendorlist));
 
-                    _init(true);
-
                     // consentement par top domain (localstorage undefined mais cookie OK)
                     if(consent == undefined && document.cookie.indexOf(cn + '_consent=') > -1) {
-                        consent = __cmp.save_consent(_consent_family(("; " + document.cookie).split("; " + cn + '_consent=')[0].split(";")[1])); // same consent
+                        var cookieconsent = ("; " + document.cookie).split("; " + cn + '_consent=')[0].split(";")[1] * 1;
+                        consent = _consent_family(cookieconsent); // same consent
+
+                        _init(true);
+
+                        consent = __cmp.save_consent(consent); // consent all
+                    }
+                    else {
+
+                        _init(true);
                     }
                 }
             };
