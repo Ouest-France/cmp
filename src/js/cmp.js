@@ -10,6 +10,19 @@
     // lib throttle https://lodash.com/docs#throttle
     ##CMPTHROTTLE##
 
+    var _getAllowedPurposes = function() {
+        var r = [1, 2];
+        if(consent.analytics){
+            r.push(3);
+        }
+        if(consent.social){
+            r.push(4);
+        }
+        if(consent.advertising){
+            r.push(5);
+        }
+        return r;
+    }
     var _local_consent = function(name, arg) {
         // Set
         if(arg != undefined) {
@@ -272,6 +285,12 @@
     window.__cmp.save_consent = function(consent) {
         consent = __cmp.consent(consent);
         _consent_token(false);
+
+        consentData.setPurposesAllowed(_getAllowedPurposes());
+        consentData.setVendorsAllowed(consent.advertising ? vendorlist.vendors.map(function(vendor){return vendor.id}) : []);
+
+        window.localStorage.setItem(cn+'-consent-data', consentData.getConsentString());
+
         __cmp.hide();
         dataLayer.push({'event':cn+'Change'});
         if(window.evt_scroll) {
@@ -363,9 +382,9 @@
             consentData.setGlobalVendorList(vendorlist);
         }
         consent = consent ? consent : _consent_family(63);
-        consentData.setPurposesAllowed(consent.functionning ? vendorlist.purposes.map(function(purpose){return purpose.id}) : []);
-        consentData.setVendorsAllowed(consent.functionning ? vendorlist.vendors.map(function(vendor){return vendor.id}) : []);
 
+        consentData.setPurposesAllowed(_getAllowedPurposes());
+        consentData.setVendorsAllowed(consent.advertising ? vendorlist.vendors.map(function(vendor){return vendor.id}) : []);
 
         if(will_revalidate) {
             // console.log('computeConsentString', consentData);

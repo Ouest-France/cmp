@@ -6,3 +6,19 @@ Gestion des cookies en conformité **RGPD** avec gestion du consentement au form
 ## A propos ?
 
 Fait par OuestFrance pour la gestion des cookies du groupe SIPA.
+
+## install
+Variable d'env nécéssaire :
+`export FTP_ENV='sipacmp'`
+
+
+```
+yarn install 
+yarn build
+```
+
+## dev
+
+```
+yarn watch
+```
