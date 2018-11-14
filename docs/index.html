@@ -119,6 +119,13 @@
             <textarea>https://vendorlist.consensu.org/vendorlist.json</textarea>
         </div>
     </div>
+    <script>__cmp('getUserConsent', {}, function(e){
+        if(e.consent && e.consent.advertising){
+            console.log('bandeau vu et pub acceptée')
+        } else {
+            console.log('bandeau vu et pub refusée')
+        }
+    });</script>
 
     <script src="../build/js/dev/sipa-cmp.min.js"></script>
 </body>

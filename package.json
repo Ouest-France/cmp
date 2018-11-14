@@ -4,6 +4,8 @@
   "description": "Consent Management Platform",
   "scripts": {
     "clean": "rm -rf build",
+    "build": "npx gulp",
+    "watch": "npx gulp watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
