@@ -307,6 +307,7 @@
                 "utilisateurId": ret.uuid,
                 "consent": consent
             }));
+
         });
 
         _cb_getUserConsent.map(function(el){
