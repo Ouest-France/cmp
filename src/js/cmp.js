@@ -152,7 +152,7 @@
             },
             'getUserData': function(parameter, callback){
 
-                callback({'consentData': (consentData || window.localStorage.getItem(cn+'-consent-data')).getConsentString(), 'uuid': _consent_uuid()}, true);
+                callback({'consent': _consent(), 'consentData': (consentData || window.localStorage.getItem(cn+'-consent-data')).getConsentString(), 'uuid': _consent_uuid()}, true);
             },
             'getUserConsent': function(parameter, callback){
                 var c = _consent();
@@ -304,7 +304,8 @@
             request.setRequestHeader('Content-Type', 'application/json');
             request.send(JSON.stringify({
                 "consentString": ret.consentData,
-                "utilisateurId": ret.uuid
+                "utilisateurId": ret.uuid,
+                "consent": consent
             }));
         });
 
