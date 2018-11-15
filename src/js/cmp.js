@@ -305,7 +305,7 @@
             request.send(JSON.stringify({
                 "consentString": ret.consentData,
                 "utilisateurId": ret.uuid,
-                "consent": consent
+                "consent": _consent_family(consent)
             }));
 
         });
