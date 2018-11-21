@@ -147,6 +147,7 @@ body.scmp-no-scroll {
             right: 0;
             bottom: 5px;
             left: 0;
+            padding: 0;
             &:before {
                 content: "";
                 display: block;
@@ -155,6 +156,7 @@ body.scmp-no-scroll {
                 position: absolute;
                 right: 0;
                 top: 50%;
+                left: auto;
                 transform: translateY(-50%);
                 background: #3AAA35;
                 border-radius: 100px;
@@ -171,6 +173,7 @@ body.scmp-no-scroll {
             position: absolute;
             right: 2px;
             top: 50%;
+            left: auto;
             transform: translateY(-50%);
             background: #fff;
             border-radius: 100px;
