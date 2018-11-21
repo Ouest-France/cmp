@@ -283,6 +283,7 @@
         document.getElementById('scmp-btn-parameters').classList.remove('scmp-hidden');
     };
     window.__cmp.save_consent = function(consent) {
+        console.log('save_consent', consent);
         consent = __cmp.consent(consent);
         _consent_token(false);
 
@@ -305,7 +306,7 @@
             request.send(JSON.stringify({
                 "consentString": ret.consentData,
                 "utilisateurId": ret.uuid,
-                "consent": _consent_family(consent)
+                "consent": _consent_family(ret.consent)
             }));
 
         });
