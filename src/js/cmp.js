@@ -199,6 +199,9 @@
         var html = '##CMPHTML##';
         html = html.replace('##scmp-text##', _config.text || '##CMPTEXT##')
         __cmp.div_banner.innerHTML = html;
+        __cmp.div_banner.setAttribute('role', 'dialog');
+        __cmp.div_banner.setAttribute('id', 'scmp-popin');
+        __cmp.div_banner.setAttribute('class', 'scmp-popin');
         document.body.appendChild(__cmp.div_banner);
 
         // set checkbox

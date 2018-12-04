@@ -188,6 +188,7 @@ body.scmp-no-scroll {
     }
     .scmp-hidden,
     &.scmp-hidden {
+        display: none;
         opacity: 0;
         max-height: 0;
         overflow: hidden;
