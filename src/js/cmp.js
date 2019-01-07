@@ -419,7 +419,9 @@
     // CMP Bandeau
     if(consent == undefined && document.cookie.indexOf(cn + '_consent=') === -1) {
         // affiche bandeau
-        __cmp.show();
+        document.addEventListener("DOMContentLoaded", function(event) {
+            __cmp.show();
+        });
 
         _consent_token(true);
 
