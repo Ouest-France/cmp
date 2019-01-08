@@ -419,10 +419,13 @@
     // CMP Bandeau
     if(consent == undefined && document.cookie.indexOf(cn + '_consent=') === -1) {
         // affiche bandeau
-        document.addEventListener("DOMContentLoaded", function(event) {
+        if( document.readyState === 'complete' ) {
             __cmp.show();
-        });
-
+        } else {
+            document.addEventListener("DOMContentLoaded", function(event) {
+                __cmp.show();
+            });
+        }
         _consent_token(true);
 
         if(!window[cn + '_gcda']) {
