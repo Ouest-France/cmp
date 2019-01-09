@@ -422,7 +422,7 @@
         if( document.readyState !== 'loading' ) {
             __cmp.show();
         } else {
-            document.onreadystatechange(function() {
+            document.addEventListener('readystatechange', function() {
                 __cmp.show();
             });
         }
