@@ -419,10 +419,10 @@
     // CMP Bandeau
     if(consent == undefined && document.cookie.indexOf(cn + '_consent=') === -1) {
         // affiche bandeau
-        if( document.readyState === 'complete' ) {
+        if( document.readyState !== 'loading' ) {
             __cmp.show();
         } else {
-            document.addEventListener("DOMContentLoaded", function(event) {
+            document.onreadystatechange(function() {
                 __cmp.show();
             });
         }
