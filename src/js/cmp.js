@@ -244,7 +244,7 @@
                 document.querySelector('.scmp-list-parameters').classList.remove('retention');
 
                 document.querySelector('#scmp-btn-validation').setAttribute('data-trkcmp', 'accepter1');
-                document.querySelector('label[for="publicite"]').setAttribute('data-trkcmp', 'taquet-pub');
+                document.querySelector('label[for="scmp-publicite"]').setAttribute('data-trkcmp', 'taquet-pub');
                 consent = __cmp.save_consent(consent);
                 retention = false;
                 return;
@@ -263,7 +263,7 @@
                 document.querySelector('.scmp-list-parameters').classList.add('retention');
 
                 document.querySelector('#scmp-btn-validation').setAttribute('data-trkcmp', 'accepter3');
-                document.querySelector('label[for="publicite"]').setAttribute('data-trkcmp', 'taquet-pub2');
+                document.querySelector('label[for="scmp-publicite"]').setAttribute('data-trkcmp', 'taquet-pub2');
                 retention = true;
                 return;
             }
