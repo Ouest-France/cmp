@@ -423,7 +423,9 @@
             __cmp.show();
         } else {
             document.addEventListener('readystatechange', function() {
-                __cmp.show();
+                if( document.readyState == 'complete' ) {
+                    __cmp.show();
+                }
             });
         }
         _consent_token(true);
