@@ -423,7 +423,7 @@
             __cmp.show();
         } else {
             document.addEventListener('readystatechange', function() {
-                if( document.readyState == 'complete' ) {
+                if(!__cmp.div_banner) {
                     __cmp.show();
                 }
             });
