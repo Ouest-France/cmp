@@ -72,8 +72,8 @@
             "social":       "000010",
             "advertising":  "000100",
             "analytics":    "001000",
-            "family":       "010000",
-            "family_2":     "100000",
+            "editorial":    "010000",
+            "family":       "100000",
         }, family = 0;
 
         // Encode family
@@ -91,8 +91,8 @@
                 "social":       arg & obj.social >>> 0 ? true : false,
                 "advertising":  arg & obj.advertising >>> 0 ? true : false,
                 "analytics":    arg & obj.analytics >>> 0 ? true : false,
+                "editorial":    arg & obj.editorial >>> 0 ? true : false,
                 "family":       arg & obj.family >>> 0 ? true : false,
-                "family_2":     arg & obj.family_2 >>> 0 ? true : false,
             }
         }
         // else {
