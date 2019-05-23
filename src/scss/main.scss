@@ -149,6 +149,7 @@ body.scmp-no-scroll {
             bottom: 5px;
             left: 0;
             padding: 0;
+            margin: 0;
             &:before {
                 content: "";
                 display: block;
@@ -161,6 +162,10 @@ body.scmp-no-scroll {
                 transform: translateY(-50%);
                 background: #3AAA35;
                 border-radius: 100px;
+            }
+
+            &[for="scmp-fonctionnement"] {
+                cursor: initial;
             }
         }
         [type="checkbox"]:not(:checked) + label:before {
