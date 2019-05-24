@@ -412,7 +412,7 @@
 
     var url = window.location.href;
     // consentement par navigation
-    if(_consent_token() && !window[cn + '_gcda'] && url.indexOf('politique-de-protection-des-donnees-personnelles') > -1 && url.indexOf('/cookies') > -1 ) { // _global_consent_doesnt_apply
+    if(_consent_token() && !window[cn + '_gcda'] && url.indexOf('/politique-de-protection-des-donnees-personnelles') < 0 && url.indexOf('/cookies') < 0) { // _global_consent_doesnt_apply
         // console.log('consent nav')
         consent = __cmp.save_consent(_consent_family(63),'navigation'); // consent all
     }
