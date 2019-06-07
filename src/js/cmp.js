@@ -72,8 +72,8 @@
             "social":       "000010",
             "advertising":  "000100",
             "analytics":    "001000",
-            "family":       "010000",
-            "family_2":     "100000",
+            "editorial":    "010000",
+            "family":       "100000",
         }, family = 0;
 
         // Encode family
@@ -91,8 +91,8 @@
                 "social":       arg & obj.social >>> 0 ? true : false,
                 "advertising":  arg & obj.advertising >>> 0 ? true : false,
                 "analytics":    arg & obj.analytics >>> 0 ? true : false,
+                "editorial":    arg & obj.editorial >>> 0 ? true : false,
                 "family":       arg & obj.family >>> 0 ? true : false,
-                "family_2":     arg & obj.family_2 >>> 0 ? true : false,
             }
         }
         // else {
@@ -245,7 +245,7 @@
 
                 document.querySelector('#scmp-btn-validation').setAttribute('data-trkcmp', 'accepter1');
                 document.querySelector('label[for="scmp-publicite"]').setAttribute('data-trkcmp', 'taquet-pub');
-                consent = __cmp.save_consent(consent);
+                consent = __cmp.save_consent(consent,'click');
                 retention = false;
                 return;
             }
@@ -285,7 +285,7 @@
         document.getElementById('scmp-popin').classList.remove('scmp-hidden');
         document.getElementById('scmp-btn-parameters').classList.remove('scmp-hidden');
     };
-    window.__cmp.save_consent = function(consent) {
+    window.__cmp.save_consent = function(consent,event) {
         console.log('save_consent', consent);
         consent = __cmp.consent(consent);
         _consent_token(false);
@@ -296,7 +296,7 @@
         window.localStorage.setItem(cn+'-consent-data', consentData.getConsentString());
 
         __cmp.hide();
-        dataLayer.push({'event':cn+'Change'});
+        dataLayer.push({'event':cn+event});
         if(window.evt_scroll) {
             window.removeEventListener('scroll', evt_scroll);
         }
@@ -347,7 +347,7 @@
 
                         _init(true);
 
-                        consent = __cmp.save_consent(consent); // consent all
+                        consent = __cmp.save_consent(consent,'navigation'); // consent all
                     }
                     else {
 
@@ -410,10 +410,11 @@
     };
     _init();
 
+    var url = window.location.href;
     // consentement par navigation
-    if(_consent_token() && !window[cn + '_gcda']) { // _global_consent_doesnt_apply
+    if(_consent_token() && !window[cn + '_gcda'] && url.indexOf('/politique-de-protection-des-donnees-personnelles') < 0 && url.indexOf('/cookies') < 0) { // _global_consent_doesnt_apply
         // console.log('consent nav')
-        consent = __cmp.save_consent(_consent_family(63)); // consent all
+        consent = __cmp.save_consent(_consent_family(63),'navigation'); // consent all
     }
 
     // CMP Bandeau
@@ -434,7 +435,7 @@
             // Ecouteur Scroll
             window.evt_scroll = _throttle(function() {
                 if((window.pageYOffset || document.documentElement.scrollTop) > window.innerHeight * (_config.scrollPercent != undefined ? _config.scrollPercent : .1)) { // 10%
-                    consent = __cmp.save_consent(_consent_family(63)); // consentement par Scroll
+                    consent = __cmp.save_consent(_consent_family(63),'scroll'); // consentement par Scroll
 
                     window.removeEventListener('scroll', evt_scroll);
                 }
