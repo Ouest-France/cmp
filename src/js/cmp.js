@@ -296,6 +296,7 @@
         window.localStorage.setItem(cn+'-consent-data', consentData.getConsentString());
 
         __cmp.hide();
+        dataLayer.push({'event':cn+'Change'});
         dataLayer.push({'event':cn+event});
         if(window.evt_scroll) {
             window.removeEventListener('scroll', evt_scroll);
