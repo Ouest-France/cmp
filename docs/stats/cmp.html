@@ -1,5 +1,6 @@
 <html>
 <head>
+    <meta charset="utf-8">
     <meta name="language" content="French">
     <meta http-equiv="content-language" content="fr-FR">
 
@@ -79,7 +80,7 @@
         if (this.readyState === XMLHttpRequest.DONE) {
             if (this.status === 200) {
                 var dataBar = [['Date']];
-                var cols = ["0", "49", "51", "53", "55", "57", "59", "61", "63"];
+                var cols = ["0", "33", "35", "37", "39", "41", "43", "45", "47", "49", "51", "53", "55", "57", "59", "61", "63"];
                 cols.forEach(el => {
                     if(el != 0) dataBar[0].push(el);
                 });
@@ -140,19 +141,19 @@
 
                 console.log('total', _scanned);
                 console.log('total', total);
-                console.log('accepté au moins le social ' + ((_scanned[63] + _scanned[0] + _scanned[61] + _scanned[59] + _scanned[57]) / total * 100).toFixed(2) + '%');
-                console.log('accepté au moins la pub ' + ((_scanned[63] + _scanned[0] + _scanned[59] + _scanned[55] + _scanned[51]) / total * 100).toFixed(2) + '%');
-                console.log('accepté au moins les stats ' + ((_scanned[63] + _scanned[0] + _scanned[61] + _scanned[55] + _scanned[53]) / total * 100).toFixed(2) + '%');
+                console.log('accepté au moins le social ' + ((_scanned[63] + _scanned[0] + _scanned[35] + _scanned[39] + _scanned[43] + _scanned[47] + _scanned[51] + _scanned[55] + _scanned[59]) / total * 100).toFixed(2) + '%');
+                console.log('accepté au moins la pub ' + ((_scanned[63] + _scanned[0] + _scanned[37] + _scanned[39] + _scanned[45] + _scanned[47] + _scanned[53] + _scanned[55] + _scanned[61]) / total * 100).toFixed(2) + '%');
+                console.log('accepté au moins les stats ' + ((_scanned[63] + _scanned[0] + _scanned[41] + _scanned[43] + _scanned[45] + _scanned[47] + _scanned[57] + _scanned[59] + _scanned[61]) / total * 100).toFixed(2) + '%');
                 console.log('tout refusé sauf fonctionnel ' + (_scanned[49] / total * 100).toFixed(2) + '%');
 
                 var stats = document.getElementById('stats');
                 stats.innerHTML = `<ul>
                     <li><span>total de consentement recueilli sur la période:</span> <span>${total.toLocaleString()}</span></li>
                     <li><span>tout accepté:</span> <span>${((_scanned[63] + _scanned[0]) / total * 100).toFixed(2)}%</span></li>
-                    <li><span>accepté au moins le social:</span> <span>${((_scanned[63] + _scanned[0] + _scanned[61] + _scanned[59] + _scanned[57]) / total * 100).toFixed(2)}%</span></li>
-                    <li><span>accepté au moins la pub:</span> <span>${((_scanned[63] + _scanned[0] + _scanned[59] + _scanned[55] + _scanned[51]) / total * 100).toFixed(2)}%</span></li>
-                    <li><span>accepté au moins les stats:</span> <span>${((_scanned[63] + _scanned[0] + _scanned[61] + _scanned[55] + _scanned[53]) / total * 100).toFixed(2)}%</span></li>
-                    <li><span>tout refusé sauf fonctionnel:</span> <span>${(_scanned[49] / total * 100).toFixed(2)}%</span></li>
+                    <li><span>accepté au moins le social:</span> <span>${((_scanned[63] + _scanned[0] + _scanned[35] + _scanned[39] + _scanned[43] + _scanned[47] + _scanned[51] + _scanned[55] + _scanned[59]) / total * 100).toFixed(2)}%</span></li>
+                    <li><span>accepté au moins la pub:</span> <span>${((_scanned[63] + _scanned[0] + _scanned[37] + _scanned[39] + _scanned[45] + _scanned[47] + _scanned[53] + _scanned[55] + _scanned[61]) / total * 100).toFixed(2)}%</span></li>
+                    <li><span>accepté au moins les stats:</span> <span>${((_scanned[63] + _scanned[0] + _scanned[41] + _scanned[43] + _scanned[45] + _scanned[47] + _scanned[57] + _scanned[59] + _scanned[61]) / total * 100).toFixed(2)}%</span></li>
+                    <li><span>tout refusé sauf fonctionnel:</span> <span>${(_scanned[33] / total * 100).toFixed(2)}%</span></li>
                 </ul>
                 `;
 
