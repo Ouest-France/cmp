@@ -128,7 +128,7 @@
                 callback({
                     metadata: consentData.getMetadataString(),
                     gdprApplies: true,
-                    hasGlobalScope: true,
+                    hasGlobalScope: false,
                     purposeConsents: consentData.getPurposesAllowed(),
                     vendorConsents: vendorConsents
                 }, true)
@@ -139,7 +139,7 @@
                 callback({
                     consentData: consentData.getConsentString(),
                     gdprApplies: true,
-                    hasGlobalScope: true
+                    hasGlobalScope: false
                 }, true)
             },
             'ping': function(parameter, callback){
