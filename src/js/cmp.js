@@ -286,7 +286,7 @@
         document.getElementById('scmp-btn-parameters').classList.remove('scmp-hidden');
     };
     window.__cmp.save_consent = function(consent,event) {
-        console.log('save_consent', consent);
+        // console.log('save_consent', consent);
         consent = __cmp.consent(consent);
         _consent_token(false);
 
@@ -388,10 +388,15 @@
             consentData = new __cmpConsentString(consentData);
             consentData.setGlobalVendorList(vendorlist);
         }
-        consent = consent ? consent : _consent_family(63);
 
-        consentData.setPurposesAllowed(_getAllowedPurposes());
-        consentData.setVendorsAllowed(consent.advertising ? vendorlist.vendors.map(function(vendor){return vendor.id}) : []);
+        if(consent) {
+            consentData.setPurposesAllowed(_getAllowedPurposes());
+            consentData.setVendorsAllowed(consent.advertising ? vendorlist.vendors.map(function(vendor){return vendor.id}) : []);
+        } else {
+            consent = _consent_family(0);
+            consentData.setPurposesAllowed([]);
+            consentData.setVendorsAllowed([]);
+        }
 
         if(will_revalidate) {
             // console.log('computeConsentString', consentData);
@@ -436,6 +441,7 @@
             // Ecouteur Scroll
             window.evt_scroll = _throttle(function() {
                 if((window.pageYOffset || document.documentElement.scrollTop) > window.innerHeight * (_config.scrollPercent != undefined ? _config.scrollPercent : .1)) { // 10%
+                    // console.log('consent scroll');
                     consent = __cmp.save_consent(_consent_family(63),'scroll'); // consentement par Scroll
 
                     window.removeEventListener('scroll', evt_scroll);
