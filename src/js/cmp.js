@@ -104,28 +104,35 @@
     var _cmpStub_commandQueue = window.__cmp.commandQueue;
     var _config = (window.__cmp && window.__cmp.config ? window.__cmp.config : {});
     var _cb_getUserConsent = [];
+    var _cb_getVendorConsents = [];
     window.dataLayer = window.dataLayer || [];
 
     // CMP IAB
     window.__cmp = function(command, parameter, cb) {
         var cmp = {
             'getVendorConsents': function(parameter, callback){
-                // console.log('getVendorConsents', parameter);
+                function resolve() {
+                    var vendorIds = parameter || [];
+                    var vendorConsents = {};
+                    consentData.vendorList.vendors.forEach(function(vendor) {
+                        if (!vendorIds.length || vendorIds.indexOf(vendor.id) !== -1) {
+                            vendorConsents[vendor.id] = consentData.allowedVendorIds.indexOf(vendor.id) !== -1
+                        }
+                    });
+                    callback({
+                        metadata: consentData.getMetadataString(),
+                        gdprApplies: true,
+                        hasGlobalScope: false,
+                        purposeConsents: consentData.getPurposesAllowed(),
+                        vendorConsents: vendorConsents,
+                        vendorList: consentData.vendorList
+                    }, true);
+                }
 
-                var vendorIds = parameter || [];
-                var vendorConsents = {};
-                consentData.vendorList.vendors.forEach(function(vendor) {
-                if (!vendorIds.length || vendorIds.indexOf(vendor.id) !== -1)
-                    vendorConsents[vendor.id] = consentData.allowedVendorIds.indexOf(vendor.id) !== -1
-                });
-                callback({
-                    metadata: consentData.getMetadataString(),
-                    gdprApplies: true,
-                    hasGlobalScope: false,
-                    purposeConsents: consentData.getPurposesAllowed(),
-                    vendorConsents: vendorConsents,
-                    vendorList: consentData.vendorList
-                }, true)
+                if(typeof consentData == "undefined") {
+                    return _cb_getVendorConsents.push(Promise.resolve(resolve));
+                }
+                resolve();
             },
             'getConsentData': function(parameter, callback){
                 // console.log('getConsentData', parameter);
@@ -211,6 +218,7 @@
 
         function _setVendorCheckbox() {
             __cmp('getVendorConsents', null, function(res){
+console.log('_setVendorCheckbox')
                 document.querySelectorAll('input[data-consent-partner]').forEach(function(el){
                     el.setAttribute('checked', res.vendorConsents[el.getAttribute('data-consent-partner')]);
                     el.checked = res.vendorConsents[el.getAttribute('data-consent-partner')];
@@ -439,6 +447,12 @@
 
                         _init(true);
                     }
+
+                    _cb_getVendorConsents.map(function(el){
+                        el.then(function(callback){
+                            callback();
+                        });
+                    });
                 }
             };
 
