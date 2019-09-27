@@ -11,17 +11,14 @@
     ##CMPTHROTTLE##
 
     var _getAllowedPurposes = function() {
-        var r = [1, 2];
-        if(consent.analytics){
-            r.push(3);
-        }
-        if(consent.social){
-            r.push(4);
-        }
-        if(consent.advertising){
-            r.push(5);
+        var r = [];
+        for (var i = 1; i < 6; i++) {
+            if(consent['iab-purpose-'+i]) r.push(i);
         }
         return r;
+    }
+    var _getAllowedVendors = function() {
+        return consentData.allowedVendorIds;
     }
     var _local_consent = function(name, arg) {
         // Set
@@ -86,23 +83,19 @@
         } else if("number" == typeof arg) {
             arg = arg >>> 0;
 
-            return {
+            var ret = {
                 "functionning": arg & obj.functionning >>> 0 ? true : false,
                 "social":       arg & obj.social >>> 0 ? true : false,
                 "advertising":  arg & obj.advertising >>> 0 ? true : false,
                 "analytics":    arg & obj.analytics >>> 0 ? true : false,
                 "editorial":    arg & obj.editorial >>> 0 ? true : false,
-                "family":       arg & obj.family >>> 0 ? true : false,
+                "family":       arg & obj.family >>> 0 ? true : false
             }
+            for (var i = 0; i < 6; i++) {
+                ret['iab-purpose-'+i] = ret.advertising;
+            }
+            return ret;
         }
-        // else {
-        //     var ret = {}
-        //     Object.keys(obj).map(function(key, index) {
-        //         ret[key] = false;
-        //     });
-        //     ret["family"] = ret["family_2"] = true;
-        //     return ret;
-        // }
     };
 
     var consent = _consent();
@@ -130,7 +123,8 @@
                     gdprApplies: true,
                     hasGlobalScope: false,
                     purposeConsents: consentData.getPurposesAllowed(),
-                    vendorConsents: vendorConsents
+                    vendorConsents: vendorConsents,
+                    vendorList: consentData.vendorList
                 }, true)
             },
             'getConsentData': function(parameter, callback){
@@ -205,80 +199,171 @@
         document.body.appendChild(__cmp.div_banner);
 
         // set checkbox
-        __cmp('getUserConsent', null, function(){
-            document.querySelectorAll('input[data-consent-family]').forEach(function(el){
-                el.setAttribute('checked', consent[el.getAttribute('data-consent-family')]);
-                el.checked = consent[el.getAttribute('data-consent-family')];
+        function _setCheckbox() {
+            __cmp('getUserConsent', null, function(){
+                document.querySelectorAll('input[data-consent-family]').forEach(function(el){
+                    el.setAttribute('checked', consent[el.getAttribute('data-consent-family')]);
+                    el.checked = consent[el.getAttribute('data-consent-family')];
+                });
             });
+        }
+        _setCheckbox();
+
+        function _setVendorCheckbox() {
+            __cmp('getVendorConsents', null, function(res){
+                document.querySelectorAll('input[data-consent-partner]').forEach(function(el){
+                    el.setAttribute('checked', res.vendorConsents[el.getAttribute('data-consent-partner')]);
+                    el.checked = res.vendorConsents[el.getAttribute('data-consent-partner')];
+                });
+            });
+
+        }
+
+        __cmp('getVendorConsents', null, function(res){
+            var ul = document.querySelector('#scmp-list-partners');
+            var template = ul.innerHTML;
+            var purposes = {};
+            res.vendorList.purposes.forEach(function(purpose) {
+                purposes[purpose.id] = purpose;
+            });
+            var features = {};
+            res.vendorList.features.forEach(function(feature) {
+                features[feature.id] = feature;
+            });
+
+            var html = '';
+            res.vendorList.vendors.forEach(function(vendor){
+                var desc = '<div class="scmp-partner-detail scmp-hidden">';
+
+                desc += '<div><div class="scmp-strong">Politique de vie privée :</div><a href="' + vendor.policyUrl + '" target="_policyVendor">' + vendor.policyUrl + '</a></div>';
+
+                if(vendor.purposeIds.length) {
+                    desc += '<div class="scmp-title">Finalités (Consentement) : </div>';
+                    vendor.purposeIds.forEach(function(purpose) {
+                        desc += '<div>' + purposes[purpose].name + '</div>';
+                    });
+                }
+
+                if(vendor.legIntPurposeIds.length) {
+                    desc += '<div class="scmp-title">Finalités (Intérêts légitimes) : </div>';
+                    vendor.legIntPurposeIds.forEach(function(purpose) {
+                        desc += '<div>' + purposes[purpose].name + '</div>';
+                    });
+                }
+
+                if(vendor.featureIds.length) {
+                    desc += '<div class="scmp-title">Fonctionnalités : </div>';
+                    vendor.featureIds.forEach(function(feature) {
+                        desc += '<div>' + features[feature].name + '</div>';
+                    });
+                }
+
+                desc += '</div>';
+
+                var text = template;
+                text = text.replace(/partner-id/g, '' + vendor.id);
+                text = text.replace(/scmp-partner-i/g, 'scmp-partner-' + vendor.id);
+                text = text.replace(/partner-name/, '' + vendor.name);
+                text = text.replace(/partner-text/, desc);
+                text = text.replace(/(checked)/, res.vendorConsents[vendor.id] ? '$1' : '');
+
+                html += text;
+            });
+            ul.innerHTML = html;
         });
+
+
+        function _togglePopinParameters(open) {
+            document.querySelector('#scmp-popin').classList[open?'remove':'add']('scmp-parameters-open');
+            document.querySelector('#scmp-btn-parameters').classList[open?'remove':'add']('scmp-hidden');
+            document.body.classList[open?'remove':'add']('scmp-no-scroll');
+
+            document.querySelector('#scmp-btn-validation').classList[!open?'remove':'add']('scmp-hidden');
+            document.querySelector('#scmp-btn-disallow').classList[!open?'remove':'add']('scmp-hidden');
+            document.querySelector('#scmp-parameters').classList[!open?'remove':'add']('scmp-hidden');
+            document.querySelector('#scmp-overlay').classList[!open?'remove':'add']('scmp-hidden');
+        }
+        function _togglePopinPartenaires(open) {
+            if(open && document.querySelector('#scmp-popin').classList.contains('scmp-parameters-open')) {
+                document.querySelector('#scmp-parameters').classList['remove']('scmp-hidden');
+            } else {
+                document.querySelector('#scmp-parameters').classList['add']('scmp-hidden');
+            }
+            document.querySelector('#scmp-actions-parameters').classList[open?'remove':'add']('scmp-hidden');
+            document.querySelector('#scmp-header').classList[open?'remove':'add']('scmp-hidden');
+
+            document.querySelector('#scmp-popin').classList[open?'remove':'add']('scmp-partners-open');
+            document.querySelector('#scmp-btn-partners').classList[open?'remove':'add']('scmp-hidden');
+            document.body.classList[open?'remove':'add']('scmp-no-scroll');
+
+            document.querySelector('#scmp-actions-partners').classList[!open?'remove':'add']('scmp-hidden');
+            document.querySelector('#scmp-partners').classList[!open?'remove':'add']('scmp-hidden');
+            document.querySelector('#scmp-overlay').classList[!open?'remove':'add']('scmp-hidden');
+        }
 
         // Gestion affichage parametres
         document.querySelector('#scmp-btn-parameters').addEventListener('click', function(){
+            _togglePopinParameters(false);
+        });
+        // Gestion affichage partneraires
+        document.querySelector('#scmp-btn-partners').addEventListener('click', function(){
+            _togglePopinPartenaires(false);
+        });
+        // Gestion affichage détail d'un partenaire
+        document.querySelector('#scmp-list-partners').addEventListener('click', function(e){
+            var elem = e.target.closest(".scmp-arrow-down");
+            if(!elem) return;
 
-            document.querySelector('#scmp-popin').classList.add('scmp-parameters-open');
-
-            document.querySelector('#scmp-btn-parameters').classList.add('scmp-hidden');
-
-            document.querySelector('#scmp-parameters').classList.remove('scmp-hidden');
-            document.querySelector('#scmp-overlay').classList.remove('scmp-hidden');
-
-            document.querySelector('#scmp-btn-validation').setAttribute('data-trkcmp', 'accepter2');
-
-            document.body.classList.add('scmp-no-scroll');
+            elem.parentElement.querySelector('.scmp-partner-detail').classList.toggle('scmp-hidden');
+            elem.classList.toggle('scmp-arrow-up');
+        });
+        // Gestion affichage accepter partenaires
+        document.querySelector('#scmp-btn-allow-partners').addEventListener('click', function(){
+            consentData.allowedVendorIds = [];
+            document.querySelectorAll('input[data-consent-partner]').forEach(function(el){
+                if(el.checked) {
+                    consentData.allowedVendorIds.push(el.getAttribute('data-consent-partner') * 1);
+                }
+            });
+            _togglePopinPartenaires(true);
         });
 
         // Consentement par click
-        var retention = false;
+        // tout
+        document.querySelector('#scmp-btn-allow').addEventListener('click', function(){
+            console.log('consent all');
+            console.log(consentData);
+            consentData.allowedVendorIds = consentData.vendorList.vendors.map(function(vendor){return vendor.id});
+            consent = __cmp.save_consent(_consent_family(63),'click all');
+            _setCheckbox();
+            _setVendorCheckbox();
+            _togglePopinParameters(true);
+        });
+        // rien
+        document.querySelector('#scmp-btn-disallow').addEventListener('click', function(){
+            console.log('consent none');
+            consentData.allowedVendorIds = [];
+            consent = __cmp.save_consent(_consent_family(1),'click none');
+            _setCheckbox();
+            _setVendorCheckbox();
+            _togglePopinParameters(true);
+        });
+        // spécifique
         document.querySelector('#scmp-btn-validation').addEventListener('click', function(){
             document.querySelectorAll('input[data-consent-family]').forEach(function(el){
                 consent[el.getAttribute('data-consent-family')] = el.checked;
             });
-
-            if(consent.advertising || retention) {
-                document.querySelector('#scmp-parameters').classList.add('scmp-hidden');
-                document.querySelector('#scmp-confirmation').classList.add('scmp-hidden');
-
-                document.querySelector('#scmp-description').classList.remove('scmp-hidden');
-                document.querySelector('#scmp-header').classList.remove('scmp-hidden');
-
-                document.querySelector('.scmp-list-parameters').classList.remove('retention');
-
-                document.querySelector('#scmp-btn-validation').setAttribute('data-trkcmp', 'accepter1');
-                document.querySelector('label[for="scmp-publicite"]').setAttribute('data-trkcmp', 'taquet-pub');
-                consent = __cmp.save_consent(consent,'click');
-                retention = false;
-                return;
-            }
-            if(!consent.advertising) {
-                document.querySelector('#scmp-popin').classList.add('scmp-parameters-open');
-
-                document.querySelector('#scmp-parameters').classList.remove('scmp-hidden');
-                document.querySelector('#scmp-overlay').classList.remove('scmp-hidden');
-                document.querySelector('#scmp-confirmation').classList.remove('scmp-hidden');
-
-                document.querySelector('#scmp-btn-parameters').classList.add('scmp-hidden');
-                document.querySelector('#scmp-description').classList.add('scmp-hidden');
-                document.querySelector('#scmp-header').classList.add('scmp-hidden');
-
-                document.querySelector('.scmp-list-parameters').classList.add('retention');
-
-                document.querySelector('#scmp-btn-validation').setAttribute('data-trkcmp', 'accepter3');
-                document.querySelector('label[for="scmp-publicite"]').setAttribute('data-trkcmp', 'taquet-pub2');
-                retention = true;
-                return;
-            }
+            console.log('consent click');
+            consent = __cmp.save_consent(consent,'click');
+            _setCheckbox();
+            _setVendorCheckbox();
+            _togglePopinParameters(true);
         });
     };
     window.__cmp.hide = function() {
         if(!__cmp.div_banner) return;
 
-        document.querySelector('#scmp-popin').classList.remove('scmp-parameters-open');
-
-        document.querySelector('#scmp-parameters').classList.add('scmp-hidden');
-        document.querySelector('#scmp-overlay').classList.add('scmp-hidden');
         document.querySelector('#scmp-popin').classList.add('scmp-hidden');
-
-        document.body.classList.remove('scmp-no-scroll');
     };
     window.__cmp.show = function() {
         __cmp._create_banner();
@@ -291,7 +376,7 @@
         _consent_token(false);
 
         consentData.setPurposesAllowed(_getAllowedPurposes());
-        consentData.setVendorsAllowed(consent.advertising ? vendorlist.vendors.map(function(vendor){return vendor.id}) : []);
+        consentData.setVendorsAllowed(_getAllowedVendors());
 
         window.localStorage.setItem(cn+'-consent-data', consentData.getConsentString());
 
@@ -378,7 +463,7 @@
             // Modify the consent data
             consentData.setCmpId(85);
             consentData.setConsentScreen(1);
-            consentData.setCmpVersion(1);
+            consentData.setCmpVersion(2);
             consentData.setGlobalVendorList(vendorlist);
             consentData.setConsentLanguage('fr');
 
@@ -391,9 +476,9 @@
 
         if(consent) {
             consentData.setPurposesAllowed(_getAllowedPurposes());
-            consentData.setVendorsAllowed(consent.advertising ? vendorlist.vendors.map(function(vendor){return vendor.id}) : []);
+            consentData.setVendorsAllowed(_getAllowedVendors());
         } else {
-            consent = _consent_family(0);
+            consent = _consent_family(1);
             consentData.setPurposesAllowed([]);
             consentData.setVendorsAllowed([]);
         }

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -111,7 +110,7 @@
         </ul><br>
         <p>Puis 2 après consentement :</p>
         <ul>
-          <li>sipacmp-consent : JSON contenant le consentement par familles (ex : {"functionning":true,"social":true,"advertising":true,"analytics":true,"editorial":true,"family":true})</li>
+          <li>sipacmp-consent : JSON contenant le consentement par familles (ex : {"functionning":true, "social":true, "advertising":true, "analytics":true, "editorial":true, "family":true})</li>
           <li>sipacmp-consent-uuid : identifiant unique permettant de récolter des données anonymes sur le consentement</li>
         </ul>
 
@@ -120,34 +119,18 @@
         <p>Si vous avez des tags présents en dur dans votre site à même de poser des cookies (analytics, publicité...), vous pouvez les encapsuler en utilisant les familles de cookies ci-dessus. Voici un exemple si vous voulez insérer un tag Google Analytics via Gtag :<br>
 
         <div class="form">
-          <textarea style="height: 250px">
-          &lt; script async src="https://www.googletagmanager.com/gtag/js?id=UA-12345678-1">&lt;//script>
+          <textarea style="height: 250px">&lt;script async src="https://www.googletagmanager.com/gtag/js?id=UA-12345678-1">&lt;/script>
+&lt;script>
+    __cmp('getUserConsent', {}, function(e){
+        if(e.consent && e.consent.analytics){
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
 
-          &lt;script>
-
-          (function(){
-                  // Guard clause sur toutes les combinaisons où les cookies de webanalytics ne sont pas acceptés
-                  if( -1 !== document.cookie.indexOf('sipacmp_consent=33')
-                  ||  -1 !== document.cookie.indexOf('sipacmp_consent=35')
-                  ||  -1 !== document.cookie.indexOf('sipacmp_consent=37')
-                  ||  -1 !== document.cookie.indexOf('sipacmp_consent=39')
-                  ||  -1 !== document.cookie.indexOf('sipacmp_consent=49')
-                  ||  -1 !== document.cookie.indexOf('sipacmp_consent=51')
-                  ||  -1 !== document.cookie.indexOf('sipacmp_consent=53')
-                  ||  -1 !== document.cookie.indexOf('sipacmp_consent=55')
-                  ) return;
-
-                  window.dataLayer = window.dataLayer || [];
-                    function gtag(){dataLayer.push(arguments);}
-                    gtag('js', new Date());
-
-                    gtag('config', 'UA-12345678-1');
-              })();
-
-
-          &lt;/script>
-
-          </textarea>
+            gtag('config', 'UA-12345678-1');
+        }
+    })();
+&lt;/script></textarea>
         </div>
 
 
