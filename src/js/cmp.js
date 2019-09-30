@@ -326,7 +326,7 @@ console.log('_setVendorCheckbox')
             elem.parentElement.querySelector('.scmp-partner-detail').classList.toggle('scmp-hidden');
             elem.classList.toggle('scmp-arrow-up');
         });
-        // Gestion affichage accepter partenaires
+        // Gestion accepter partenaires
         document.querySelector('#scmp-btn-allow-partners').addEventListener('click', function(){
             consentData.allowedVendorIds = [];
             document.querySelectorAll('input[data-consent-partner]').forEach(function(el){
@@ -335,6 +335,7 @@ console.log('_setVendorCheckbox')
                 }
             });
             _togglePopinPartenaires(true);
+            _togglePopinParameters(false);
         });
 
         // Consentement par click
