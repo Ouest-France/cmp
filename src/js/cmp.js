@@ -336,6 +336,18 @@
             _togglePopinPartenaires(true);
             _togglePopinParameters(false);
         });
+        document.querySelector('#scmp-btn-allow-all-partners').addEventListener('click', function(){
+            consentData.allowedVendorIds = consentData.vendorList.vendors.map(function(vendor){return vendor.id});
+            _setVendorCheckbox();
+            _togglePopinPartenaires(true);
+            _togglePopinParameters(false);
+        });
+        document.querySelector('#scmp-btn-disallow-all-partners').addEventListener('click', function(){
+            consentData.allowedVendorIds = [];
+            _setVendorCheckbox();
+            _togglePopinPartenaires(true);
+            _togglePopinParameters(false);
+        });
 
         // Consentement par click
         // tout
