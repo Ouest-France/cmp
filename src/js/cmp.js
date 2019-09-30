@@ -219,7 +219,6 @@
 
         function _setVendorCheckbox() {
             __cmp('getVendorConsents', null, function(res){
-console.log('_setVendorCheckbox')
                 document.querySelectorAll('input[data-consent-partner]').forEach(function(el){
                     el.setAttribute('checked', res.vendorConsents[el.getAttribute('data-consent-partner')]);
                     el.checked = res.vendorConsents[el.getAttribute('data-consent-partner')];
