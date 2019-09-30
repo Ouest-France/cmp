@@ -355,18 +355,18 @@
             console.log('consent all');
             console.log(consentData);
             consentData.allowedVendorIds = consentData.vendorList.vendors.map(function(vendor){return vendor.id});
-            consent = __cmp.save_consent(_consent_family(63),'click all');
             _setCheckbox();
             _setVendorCheckbox();
+            consent = __cmp.save_consent(_consent_family(63),'click all');
             _togglePopinParameters(true);
         });
         // rien
         document.querySelector('#scmp-btn-disallow').addEventListener('click', function(){
             console.log('consent none');
             consentData.allowedVendorIds = [];
-            consent = __cmp.save_consent(_consent_family(1),'click none');
             _setCheckbox();
             _setVendorCheckbox();
+            consent = __cmp.save_consent(_consent_family(1),'click none');
             _togglePopinParameters(true);
         });
         // spécifique
@@ -375,9 +375,9 @@
                 consent[el.getAttribute('data-consent-family')] = el.checked;
             });
             console.log('consent click');
-            consent = __cmp.save_consent(consent,'click');
             _setCheckbox();
             _setVendorCheckbox();
+            consent = __cmp.save_consent(consent,'click');
             _togglePopinParameters(true);
         });
     };
