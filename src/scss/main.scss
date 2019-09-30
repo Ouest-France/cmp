@@ -206,6 +206,8 @@ body.scmp-no-scroll {
         .label,
         label {
             right: 44px;
+            bottom: auto;
+            height: 28px;
         }
         label {
             &:after,

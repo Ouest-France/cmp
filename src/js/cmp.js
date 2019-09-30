@@ -1,5 +1,6 @@
 ;(function(cn){
     if(!window.localStorage) return;
+    var __cmp_version__ = 3;
 
     // polyfill
     window.NodeList&&!NodeList.prototype.forEach&&(NodeList.prototype.forEach=function(o,t){t=t||window;for(var i=0;i<this.length;i++)o.call(t,this[i],i,this)});
@@ -383,6 +384,7 @@ console.log('_setVendorCheckbox')
         consent = __cmp.consent(consent);
         _consent_token(false);
 
+        consentData.setCmpVersion(__cmp_version__);
         consentData.setPurposesAllowed(_getAllowedPurposes());
         consentData.setVendorsAllowed(_getAllowedVendors());
 
@@ -477,7 +479,7 @@ console.log('_setVendorCheckbox')
             // Modify the consent data
             consentData.setCmpId(85);
             consentData.setConsentScreen(1);
-            consentData.setCmpVersion(2);
+            consentData.setCmpVersion(__cmp_version__);
             consentData.setGlobalVendorList(vendorlist);
             consentData.setConsentLanguage('fr');
 
@@ -523,7 +525,7 @@ console.log('_setVendorCheckbox')
     }
 
     // CMP Bandeau
-    if(consent == undefined && document.cookie.indexOf(cn + '_consent=') === -1) {
+    if((consent == undefined && document.cookie.indexOf(cn + '_consent=') === -1) || consentData.getCmpVersion() < __cmp_version__) {
         // affiche bandeau
         if( document.readyState !== 'loading' ) {
             __cmp.show();
