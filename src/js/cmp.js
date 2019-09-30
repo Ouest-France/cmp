@@ -11,10 +11,11 @@
     // lib throttle https://lodash.com/docs#throttle
     ##CMPTHROTTLE##
 
-    var _getAllowedPurposes = function() {
+    var _getAllowedPurposes = function(c) {
+        c = c ? c : consent;
         var r = [];
         for (var i = 1; i < 6; i++) {
-            if(consent['iab-purpose-'+i]) r.push(i);
+            if(!c || c['iab-purpose-'+i]) r.push(i);
         }
         return r;
     }
@@ -92,7 +93,7 @@
                 "editorial":    arg & obj.editorial >>> 0 ? true : false,
                 "family":       arg & obj.family >>> 0 ? true : false
             }
-            for (var i = 0; i < 6; i++) {
+            for (var i = 1; i < 6; i++) {
                 ret['iab-purpose-'+i] = ret.advertising;
             }
             return ret;
@@ -352,8 +353,7 @@
         // Consentement par click
         // tout
         document.querySelector('#scmp-btn-allow').addEventListener('click', function(){
-            console.log('consent all');
-            console.log(consentData);
+            // console.log('consent all');
             consentData.allowedVendorIds = consentData.vendorList.vendors.map(function(vendor){return vendor.id});
             _setCheckbox();
             _setVendorCheckbox();
@@ -362,7 +362,7 @@
         });
         // rien
         document.querySelector('#scmp-btn-disallow').addEventListener('click', function(){
-            console.log('consent none');
+            // console.log('consent none');
             consentData.allowedVendorIds = [];
             _setCheckbox();
             _setVendorCheckbox();
@@ -397,7 +397,7 @@
         _consent_token(false);
 
         consentData.setCmpVersion(__cmp_version__);
-        consentData.setPurposesAllowed(_getAllowedPurposes());
+        consentData.setPurposesAllowed(_getAllowedPurposes(consent));
         consentData.setVendorsAllowed(_getAllowedVendors());
 
         window.localStorage.setItem(cn+'-consent-data', consentData.getConsentString());
