@@ -109,6 +109,26 @@
     var _cb_getVendorConsents = [];
     window.dataLayer = window.dataLayer || [];
 
+    // set checkbox
+    function _setCheckbox() {
+        __cmp('getUserConsent', null, function(){
+            document.querySelectorAll('input[data-consent-family]').forEach(function(el){
+                el.setAttribute('checked', consent[el.getAttribute('data-consent-family')]);
+                el.checked = consent[el.getAttribute('data-consent-family')];
+            });
+        });
+    }
+
+    function _setVendorCheckbox() {
+        __cmp('getVendorConsents', null, function(res){
+            document.querySelectorAll('input[data-consent-partner]').forEach(function(el){
+                el.setAttribute('checked', res.vendorConsents[el.getAttribute('data-consent-partner')]);
+                el.checked = res.vendorConsents[el.getAttribute('data-consent-partner')];
+            });
+        });
+
+    }
+
     // CMP IAB
     window.__cmp = function(command, parameter, cb) {
         var cmp = {
@@ -207,26 +227,7 @@
         __cmp.div_banner.setAttribute('class', 'scmp-popin');
         document.body.appendChild(__cmp.div_banner);
 
-        // set checkbox
-        function _setCheckbox() {
-            __cmp('getUserConsent', null, function(){
-                document.querySelectorAll('input[data-consent-family]').forEach(function(el){
-                    el.setAttribute('checked', consent[el.getAttribute('data-consent-family')]);
-                    el.checked = consent[el.getAttribute('data-consent-family')];
-                });
-            });
-        }
         _setCheckbox();
-
-        function _setVendorCheckbox() {
-            __cmp('getVendorConsents', null, function(res){
-                document.querySelectorAll('input[data-consent-partner]').forEach(function(el){
-                    el.setAttribute('checked', res.vendorConsents[el.getAttribute('data-consent-partner')]);
-                    el.checked = res.vendorConsents[el.getAttribute('data-consent-partner')];
-                });
-            });
-
-        }
 
         __cmp('getVendorConsents', null, function(res){
             var ul = document.querySelector('#scmp-list-partners');
@@ -558,6 +559,8 @@
                 if((window.pageYOffset || document.documentElement.scrollTop) > window.innerHeight * (_config.scrollPercent != undefined ? _config.scrollPercent : .1)) { // 10%
                     // console.log('consent scroll');
                     consentData.allowedVendorIds = consentData.vendorList.vendors.map(function(vendor){return vendor.id});
+                    _setCheckbox();
+                    _setVendorCheckbox();
                     consent = __cmp.save_consent(_consent_family(63),'scroll'); // consentement par Scroll
 
                     window.removeEventListener('scroll', evt_scroll);
