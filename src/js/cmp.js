@@ -374,7 +374,7 @@
             document.querySelectorAll('input[data-consent-family]').forEach(function(el){
                 consent[el.getAttribute('data-consent-family')] = el.checked;
             });
-            console.log('consent click');
+            // console.log('consent click');
             _setCheckbox();
             _setVendorCheckbox();
             consent = __cmp.save_consent(consent,'click');
@@ -537,7 +537,7 @@
     }
 
     // CMP Bandeau
-    if((consent == undefined && document.cookie.indexOf(cn + '_consent=') === -1) || consentData.getCmpVersion() < __cmp_version__) {
+    if((consent == undefined && document.cookie.indexOf(cn + '_consent=') === -1) || (consentData && consentData.getCmpVersion() < __cmp_version__)) {
         // affiche bandeau
         if( document.readyState !== 'loading' ) {
             __cmp.show();
