@@ -488,8 +488,8 @@
 
         if(!consentData || will_revalidate) {
             // Si le consentement est nouveau ou a moins d'une semaine on revalide
-            // console.log('revalidate')
-            consentData = new __cmpConsentString();
+            // console.log('revalidate', consentData)
+            consentData = new __cmpConsentString(consentData ? consentData : '');
             // Modify the consent data
             consentData.setCmpId(85);
             consentData.setConsentScreen(1);
@@ -548,8 +548,9 @@
         consent = __cmp.save_consent(_consent_family(63),'navigation'); // consent all
     }
 
+    var _oldConsent = new __cmpConsentString(window.localStorage.getItem(cn+'-consent-data'));
     // CMP Bandeau
-    if((consent == undefined && document.cookie.indexOf(cn + '_consent=') === -1) || (consentData && consentData.getCmpVersion() < __cmp_version__)) {
+    if((consent == undefined && document.cookie.indexOf(cn + '_consent=') === -1) || (_oldConsent && _oldConsent.getCmpVersion() < __cmp_version__)) {
         // affiche bandeau
         if( document.readyState !== 'loading' ) {
             __cmp.show();
