@@ -505,11 +505,27 @@
 
             var _temp_ts = 1569916799000; // Tue Oct 01 2019 09:59:59 GMT+0200 (Central European Summer Time)
             var _fix_ts = 1569945599000; // Tue Oct 01 2019 17:59:59 GMT+0200 (Central European Summer Time)
-            if(new Date(consentData.lastUpdated).getTime() > _temp_ts && new Date(consentData.lastUpdated).getTime() < _fix_ts && consentData.allowedVendorIds.length == 0 && consentData.allowedPurposeIds.length == 5) {
-                console.log('sipacmp temp fix');
+            var _consent_ts = new Date(consentData.lastUpdated).getTime();
+            if(_consent_ts > _temp_ts && _consent_ts < _fix_ts && consentData.allowedVendorIds.length == 0 && consentData.allowedPurposeIds.length == 5) {
+                // console.log('sipacmp temp fix');
 
                 consentData.allowedVendorIds = consentData.vendorList.vendors.map(function(vendor){return vendor.id});
-                consent = __cmp.save_consent(consent,'click');
+                consent = __cmp.save_consent(consent,'fix');
+            }
+
+            _fix_ts = 1570020599000; // Tue Oct 02 2019 14:49:59 GMT+0200 (Central European Summer Time)
+            if(_consent_ts > _temp_ts && _consent_ts < _fix_ts && consentData.allowedVendorIds.length == 0 && consentData.allowedPurposeIds.length == 0) {
+                // console.log('sipacmp temp fix');
+
+                if( document.readyState !== 'loading' ) {
+                    __cmp.show();
+                } else {
+                    document.addEventListener('readystatechange', function() {
+                        if(!__cmp.div_banner) {
+                            __cmp.show();
+                        }
+                    });
+                }
             }
         }
 
