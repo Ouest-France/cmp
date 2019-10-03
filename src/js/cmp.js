@@ -99,6 +99,16 @@
             return ret;
         }
     };
+    // Permet de changer l'élément sur lequel on écoute le scroll
+    var _setScrollContainer = function (arg) {
+        if (arg instanceof HTMLElement) {
+            (_config.scrollContainer || window).removeEventListener('scroll', evt_scroll);
+            _config.scrollContainer = arg;
+            _config.scrollContainer.addEventListener('scroll', evt_scroll);
+            return true;
+        }
+        return false;
+    };
 
     var consent = _consent();
     var consentData;
@@ -183,6 +193,9 @@
                     return _cb_getUserConsent.push(Promise.resolve(callback));
                 }
                 callback({'consent': c}, true);
+            },
+            'setScrollContainer': function (parameter) {
+                return _setScrollContainer(parameter);
             }
         };
         if(typeof cmp[command] == 'function') {
@@ -582,8 +595,8 @@
         if(!window[cn + '_gcda']) {
             // Ecouteur Scroll
             window.evt_scroll = _throttle(function() {
-                if((window.pageYOffset || document.documentElement.scrollTop) > window.innerHeight * (_config.scrollPercent != undefined ? _config.scrollPercent : .1)) { // 10%
-                    // console.log('consent scroll');
+                var container = (_config.scrollContainer || document.documentElement);
+                if ((window.pageYOffset || container.scrollTop) > window.innerHeight * (_config.scrollPercent != undefined ? _config.scrollPercent : .1)) { // 10%
                     consentData.allowedVendorIds = consentData.vendorList.vendors.map(function(vendor){return vendor.id});
                     _setCheckbox();
                     _setVendorCheckbox();
@@ -592,7 +605,7 @@
                     window.removeEventListener('scroll', evt_scroll);
                 }
             }, 200, { trailing: true, leading: true });
-            window.addEventListener('scroll', evt_scroll);
+            (_config.scrollContainer || window).addEventListener('scroll', evt_scroll);
         }
     }
 
