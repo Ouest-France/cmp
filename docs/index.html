@@ -65,6 +65,14 @@
                     <textarea>&lt;script>window.__cmp.config.scrollPercent = .20; &lt;/script></textarea>
                 </li>
                 <li>
+                    <h4>Conteneur de scroll</h4>
+                    <p>Par défaut, le scroll est écouté sur <code>window</code>. Si un autre conteneur doit être utilisé, il est possible de l'indiquer comme ceci&nbsp;:</p>
+                    <code>// au chargement de la page</code>
+                    <textarea>&lt;script>window.__cmp.config.scrollContainer = document.getElementById("mon-conteneur"); &lt;/script></textarea>
+                    <code>// au cours du cycle de vie de l'application (SPA)</code>
+                    <textarea>&lt;script>window.__cmp("setScrollContainer", document.getElementById("mon-conteneur")); &lt;/script></textarea>
+                </li>
+                <li>
                     <h4>Texte d’explication</h4>
                     <code>// html autorisé. <br/>Exemple en <strong>Template Strings</strong></code>
                     <textarea style="height: 200px;">&lt;script>window.__cmp.config.text = 'Texte personnalisé <a href="https://www.domain.com/lien-1/" target="_blank" data-trkcmp="lien 1">lien 1</a> et <a href="https://www.domain.com/lien-2/" target="_blank" data-trkcmp="lien 2">lien 2</a>, fin du texte.';&lt;/script></textarea>
