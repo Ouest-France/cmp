@@ -183,9 +183,12 @@
     </div>
     <script>__cmp('getUserConsent', {}, function(e){
         if(e.consent){
-            console.log('bandeau vu et pub', e.consent.advertising)
+            console.log('bandeau vu et pub', e)
         }
-    });</script>
+        __cmp('getVendorConsents', {}, function(e){ console.log(e) })
+    });
+    window.__cmp('getVendorConsents', {}, function(e){ console.log(e) })
+    </script>
 
     <script src="../build/js/dev/sipa-cmp.min.js"></script>
 </body>

@@ -189,7 +189,7 @@
             },
             'getUserConsent': function(parameter, callback){
                 var c = _consent();
-                if(c == null) {
+                if(c == null || (_oldConsent && _oldConsent.getCmpVersion() < __cmp_version__)) {
                     return _cb_getUserConsent.push(Promise.resolve(callback));
                 }
                 callback({'consent': c}, true);
