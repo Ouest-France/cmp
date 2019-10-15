@@ -302,7 +302,6 @@
             document.body.classList[open?'remove':'add']('scmp-no-scroll');
 
             document.querySelector('#scmp-btn-validation').classList[!open?'remove':'add']('scmp-hidden');
-            document.querySelector('#scmp-btn-disallow').classList[!open?'remove':'add']('scmp-hidden');
             document.querySelector('#scmp-parameters').classList[!open?'remove':'add']('scmp-hidden');
             document.querySelector('#scmp-overlay').classList[!open?'remove':'add']('scmp-hidden');
         }
@@ -357,12 +356,6 @@
             _togglePopinPartenaires(true);
             _togglePopinParameters(false);
         });
-        document.querySelector('#scmp-btn-disallow-all-partners').addEventListener('click', function(){
-            consentData.allowedVendorIds = [];
-            _setVendorCheckbox();
-            _togglePopinPartenaires(true);
-            _togglePopinParameters(false);
-        });
 
         // Consentement par click
         // tout
@@ -372,15 +365,6 @@
             _setCheckbox();
             _setVendorCheckbox();
             consent = __cmp.save_consent(_consent_family(63),'click all');
-            _togglePopinParameters(true);
-        });
-        // rien
-        document.querySelector('#scmp-btn-disallow').addEventListener('click', function(){
-            // console.log('consent none');
-            consentData.allowedVendorIds = [];
-            _setCheckbox();
-            _setVendorCheckbox();
-            consent = __cmp.save_consent(_consent_family(1),'click none');
             _togglePopinParameters(true);
         });
         // spécifique
@@ -517,7 +501,7 @@
             consentData.setGlobalVendorList(vendorlist);
 
             var _temp_ts = 1569916799000; // Tue Oct 01 2019 09:59:59 GMT+0200 (Central European Summer Time)
-            var _fix_ts = 1569945599000; // Tue Oct 01 2019 17:59:59 GMT+0200 (Central European Summer Time)
+            var _fix_ts = 1571327999000; // Tue Oct 17 2019 17:59:59 GMT+0200 (Central European Summer Time)
             var _consent_ts = new Date(consentData.lastUpdated).getTime();
             if(_consent_ts > _temp_ts && _consent_ts < _fix_ts && consentData.allowedVendorIds.length == 0 && consentData.allowedPurposeIds.length == 5) {
                 // console.log('sipacmp temp fix');
