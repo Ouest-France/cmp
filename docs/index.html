@@ -29,23 +29,124 @@
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
     <div class="container-of">
-        <h1 class="titre-rubrique">SIPA CMP</h1>
+        <h1 class="titre-rubrique">SIPA CMP - Documentation</h1>
         <p class="margin-large">CMP du groupe SIPA certifiée conforme par l’IAB</p>
+        <p class="margin-large">Pour toute question, nous contacter à l'adresse suivante : <a href="mailto:contact-tracking@ouest-france.fr">contact-tracking@ouest-france.fr</a> </p>
 
 
-        <p class="h2 titre-rubrique">Code du stub à mettre dans le <code>&lt;head></code>: </p>
+        <p class="h2 titre-rubrique" id="p1">1/ Supprimer une éventuelle CMP qui serait déjà présente</p>
+
+        <p class="h2 titre-rubrique" id="p2">2/ Insérer le snippet suivant dans la balise <code>&lt;head></code> de toutes les pages : </p>
 
         <div class="form">
             <textarea id="snippet" style="height: 200px;"><script>!function(e,a,c,n,t){if(a.__cmp=function(){var e=[],n=function(a,c,t){"ping"===a?t&&t({gdprAppliesGlobally:!!(n&&n.config&&n.config.storeConsentGlobally),cmpLoaded:!1}):e.push({command:a,parameter:c,callback:t})};return n.commandQueue=e,n.config=a.__cmp&&a.__cmp.config?a.__cmp.config:{},n.receiveMessage=function(a){var c=a&&a.data&&a.data.__cmpCall;c&&e.push({command:c.command,parameter:c.parameter,callback:function(e,n){var t={__cmpReturn:{returnValue:e,success:n,callId:c.callId}};a.source.postMessage(t,"*")}})},(a.attachEvent||a.addEventListener)("message",function(e){a.__cmp.receiveMessage(e)},!1),function e(){if(!a.frames.__cmpLocator)if(c.body){var n=c.createElement("iframe");n.style.display="none",n.name="__cmpLocator",c.body.appendChild(n)}else setTimeout(e,50)}(),n}(),!c.getElementById(t)){var o=c.createElement("script"),s=c.getElementsByTagName("script")[0];o.async=1,o.src="https://sipaof.mgr.consensu.org/sipacmp/js/sipa-cmp.min.js",o.type="text/javascript",o.id=t,s.parentNode.insertBefore(o,s)}}(0,window,document,0,"sipacmp_loader");</script></textarea>
             <button class="btn btn-n1" onclick="document.getElementById('snippet').select(); document.execCommand('copy');confirm('code copié!');">Copier le code dans le presse papier</button>
         </div>
 
-        <p class="h3 titre-rubrique">Fonction pour réafficher le bandeau: </p>
+        <p class="h2 titre-rubrique" id="p3">3/ Insérer le code pour réafficher le bandeau</p>
+
         <div class="form">
-            <p>Si la fonction _cmp.show() est dans la page, alors le bandeau se réaffichera. Voici un exemple avec le bouton "Réafficher le bandeau" :</p> 
+            <p>La CNIL impose de placer un lien de ce type dans le footer.</p>
+            <p>Si la fonction _cmp.show() est dans la page, alors le bandeau se réaffichera. Voici un exemple avec le bouton "Réafficher le bandeau" :</p>
             <textarea>__cmp.show();</textarea>
             <button class="btn btn-n2" onclick="__cmp.show();">Réafficher le bandeau</button>
         </div>
+
+        <p class="h2 titre-rubrique"  id="p4">4/ Configurer les différentes options (optionnel)</p>
+
+        <p class="margin-small">Il suffit de mettre les balises suivantes juste <strong>après</strong> l'appel "stub"</p>
+        <div class="form" style="padding-left: 30px;">
+            <ul>
+                <li>
+                    <h4>Pourcentage de scroll</h4>
+                    <code>// consent dès 1pixel scrollé</code>
+                    <textarea>&lt;script>window.__cmp.config.scrollPercent = 0; &lt;/script></textarea>
+                    <code>// consent dès 20% scrollé</code>
+                    <textarea>&lt;script>window.__cmp.config.scrollPercent = .20; &lt;/script></textarea>
+                </li>
+                <li>
+                    <h4>Conteneur de scroll</h4>
+                    <p>Par défaut, le scroll est écouté sur <code>window</code>. Si un autre conteneur doit être utilisé, il est possible de l'indiquer comme ceci&nbsp;:</p>
+                    <code>// au chargement de la page</code>
+                    <textarea>&lt;script>window.__cmp.config.scrollContainer = document.getElementById("mon-conteneur"); &lt;/script></textarea>
+                    <code>// au cours du cycle de vie de l'application (SPA)</code>
+                    <textarea>&lt;script>window.__cmp("setScrollContainer", document.getElementById("mon-conteneur")); &lt;/script></textarea>
+                </li>
+                <li>
+                    <h4>Texte d’explication</h4>
+                    <code>// html autorisé. <br/>Exemple en <strong>Template Strings</strong></code>
+                    <textarea style="height: 200px;">&lt;script>window.__cmp.config.text = 'Texte personnalisé <a href="https://www.domain.com/lien-1/" target="_blank" data-trkcmp="lien 1">lien 1</a> et <a href="https://www.domain.com/lien-2/" target="_blank" data-trkcmp="lien 2">lien 2</a>, fin du texte.';&lt;/script></textarea>
+                </li>
+            </ul>
+        </div>
+
+        <p class="h2 titre-rubrique" id="p5">5/ Isoler les pages spécifiques</p>
+
+        <p>Ce script doit être inclus sur les pages où la navigation (scroll, clic sur un lien, rafraîchissement...) ne doit pas être considérée comme une acceptation (mentions légales, CGU).</p>
+        <div class="form">
+            <textarea>&lt;script>window.sipacmp_gcda = true; // _global_consent_doesnt_apply&lt;/script></textarea>
+        </div>
+
+        <p class="h2 titre-rubrique" id="p6">6/ Cookies et local storage</p>
+
+        <p>La CMP pose un cookie 1st party "sipacmp_consent" au niveau du top level domain. Il contient une valeur binaire correspondant à l'acceptation des différentes familles : </p>
+        <ul>
+          <li>33 : toutes les familles refusées</li>
+          <li>41 : Web analytics uniquement</li>
+          <li>35 : Social uniquement</li>
+          <li>37 : Publicité uniquement</li>
+          <li>49 : Contenus éditoriaux uniquement</li>
+          <li>43 : Webanalytics + Social</li>
+          <li>53 : Publicité + Contenus éditoriaux</li>
+          <li>45 : Web analytics + Publicité</li>
+          <li>51 : Social + contenus éditoriaux</li>
+          <li>57 : Web analytics + contenus éditoriaux</li>
+          <li>39 : Social + Publicité</li>
+          <li>47 : Web analytics + Social + Publicité</li>
+          <li>55 : Social + Publicité + Contenus éditoriaux</li>
+          <li>59 : Web analytics + Social + Contenus éditoriaux</li>
+          <li>61 : Web analytics + Publicité + Contenus éditoriaux</li>
+          <li>63 : toutes les familles acceptées</li>
+        </ul>
+        <br>
+        <p>La CMP pose également 4 local storage avant consentement :</p>
+        <ul>
+          <li>sipacmp-consent-data : contenu du consentement encodé</li>
+          <li>sipacmp-consent-token : booléen représentant l'acceptation / refus</li>
+          <li>sipacmp-vendorlist : liste des éditeurs présent dans le framework IAB</li>
+          <li>sipacmp-vendorlist-update : timestamp représentant la dernière mise à jour de la vendor list (cf. plus haut)</li>
+        </ul><br>
+        <p>Puis 2 après consentement :</p>
+        <ul>
+          <li>sipacmp-consent : JSON contenant le consentement par familles (ex : {"functionning":true, "social":true, "advertising":true, "analytics":true, "editorial":true, "family":true})</li>
+          <li>sipacmp-consent-uuid : identifiant unique permettant de récolter des données anonymes sur le consentement</li>
+        </ul>
+
+        <p class="h2 titre-rubrique" id="p7">7/ Encapsulation de tags présents en dur dans le code source</p>
+
+        <p>Si vous avez des tags présents en dur dans votre site à même de poser des cookies (analytics, publicité...), vous pouvez les encapsuler en utilisant les familles de cookies ci-dessus. Voici un exemple si vous voulez insérer un tag Google Analytics via Gtag :<br>
+
+        <div class="form">
+          <textarea style="height: 250px">&lt;script async src="https://www.googletagmanager.com/gtag/js?id=UA-12345678-1">&lt;/script>
+&lt;script>
+    __cmp('getUserConsent', {}, function(e){
+        if(e.consent && e.consent.analytics){
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'UA-12345678-1');
+        }
+    })();
+&lt;/script></textarea>
+        </div>
+
+
+
+        </p>
+
+        <p class="h2 titre-rubrique" id="p8">8/ Divers</p>
+
 
         <p class="h3 titre-rubrique">Récupérer le consentement reçu (attente validation) à la pub: </p>
         <p>L'appel à la fonction getUserConsent créer une promesse qui sera éxécutera la fonction callback lorsque l'utilisateur aura indiqué son choix. (que se soit un consentement ou un refus).</p>
@@ -73,33 +174,7 @@
             <button class="btn btn-n2" onclick="localStorage.clear();var top = location.hostname.split('.').reverse();top = top[1].length > 2 ? '.' + top[1] + '.' + top[0] : location.hostname;document.cookie = 'sipacmp_consent=;expires=Thu, 01 Jan 1970 00:00:00 GMT;domain=' + top + ';path=/;'">Nettoyer</button>
         </div>
 
-        <p class="h3 titre-rubrique">Paramètrage: </p>
 
-        <p>Variable globale pour <strong>ne pas compter comme consentement</strong> lors de la navigation: </p>
-        <p>Inclure ce script sur les pages où la navigation (scroll, clic sur un lien, rafraîchissement...) ne doit pas être considéré comme une acceptation (utile par exemple pour les pages de type mentions légales ou CGU)</p>
-        <div class="form">
-            <textarea>&lt;script>window.sipacmp_gcda = true; // _global_consent_doesnt_apply&lt;/script></textarea>
-        </div>
-
-        <p class="h3 titre-rubrique">Configuration: </p>
-
-        <p class="margin-small">Il suffit de mettre les balises suivantes juste <strong>après</strong> l'appel "stub"</p>
-        <div class="form" style="padding-left: 30px;">
-            <ul>
-                <li>
-                    <h4>Pourcentage de scroll</h4>
-                    <code>// consent dès 1pixel scrollé</code>
-                    <textarea>&lt;script>window.__cmp.config.scrollPercent = 0; &lt;/script></textarea>
-                    <code>// consent dès 20% scrollé</code>
-                    <textarea>&lt;script>window.__cmp.config.scrollPercent = .20; &lt;/script></textarea>
-                </li>
-                <li>
-                    <h4>Texte d’explication</h4>
-                    <code>// html autorisé. <br/>Exemple en <strong>Template Strings</strong></code>
-                    <textarea style="height: 200px;">&lt;script>window.__cmp.config.text = 'Texte personnalisé <a href="https://www.domain.com/lien-1/" target="_blank" data-trkcmp="lien 1">lien 1</a> et <a href="https://www.domain.com/lien-2/" target="_blank" data-trkcmp="lien 2">lien 2</a>, fin du texte.';&lt;/script></textarea>
-                </li>
-            </ul>
-        </div>
 
         <p class="h3 titre-rubrique">Url de la liste globale téléchargée toutes les semaines: </p>
         <div class="form">
@@ -108,9 +183,12 @@
     </div>
     <script>__cmp('getUserConsent', {}, function(e){
         if(e.consent){
-            console.log('bandeau vu et pub', e.consent.advertising)
+            console.log('bandeau vu et pub', e)
         }
-    });</script>
+        __cmp('getVendorConsents', {}, function(e){ console.log(e) })
+    });
+    window.__cmp('getVendorConsents', {}, function(e){ console.log(e) })
+    </script>
 
     <script src="../build/js/dev/sipa-cmp.min.js"></script>
 </body>
