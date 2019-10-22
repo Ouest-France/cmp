@@ -1,27 +1,27 @@
-var   gulp            = require("gulp")
-    , del             = require("del")
-    , include         = require("gulp-include")
-    , rename          = require("gulp-rename")
-    , uglify          = require("gulp-terser")
-    , sass            = require("gulp-sass")
-    , watch           = require("gulp-watch")
-    , sourcemaps      = require('gulp-sourcemaps')
-    , plumber         = require('gulp-plumber')
-    , cssnano         = require('gulp-cssnano')
-    , replace         = require('gulp-replace')
-    , log             = require('fancy-log')
-    , es              = require('event-stream')
-    , fs              = require('fs')
-    , minify          = require('html-minifier').minify
-    , webpack         = require('webpack')
-    , webpackStream   = require('webpack-stream')
-    , webpackConfig   = require("./webpack.config.js");
-    ;
+var gulp            = require("gulp"),
+    del             = require("del"),
+    include         = require("gulp-include"),
+    rename          = require("gulp-rename"),
+    uglify          = require("gulp-terser"),
+    sass            = require("gulp-sass"),
+    watch           = require("gulp-watch"),
+    sourcemaps      = require('gulp-sourcemaps'),
+    plumber         = require('gulp-plumber'),
+    cssnano         = require('gulp-cssnano'),
+    replace         = require('gulp-replace'),
+    log             = require('fancy-log'),
+    es              = require('event-stream'),
+    fs              = require('fs'),
+    minify          = require('html-minifier').minify,
+    webpack         = require('webpack'),
+    webpackStream   = require('webpack-stream'),
+    webpackConfig   = require("./webpack.config.js");
 
 // Variables de chemins
-var source = './src'; // dossier de travail
-var destination = './dist'; // dossier à livrer
-var build = './build'; // dossier de compilation
+var source = './src', // dossier de travail
+    destination = './dist', // dossier à livrer
+    build = './build', // dossier de compilation
+    docs = './docs'; // dossier de la documentation
 
 scsslist =
     [
@@ -57,11 +57,12 @@ function htmlmin(html){
     return minify(html, {collapseWhitespace: true});
 }
 gulp.task('compile-js', ['clean-js', 'make-sass', 'webpack', 'clean'], function () {
-    var CMPCONSENTSRING = fs.readFileSync(build + '/js/lib/cmp.consentstring.js', "utf8");
-    var CMPTHROTTLE = fs.readFileSync(source + '/js/cmp.throttle.js', "utf8");
-    var CMPCSS = fs.readFileSync(build + '/css/min/sipa-cmp.min.css', "utf8");
-    var CMPHTML = htmlmin(fs.readFileSync(source + '/template/cmp.html', "utf8"));
-    var CMPTEXT = htmlmin(fs.readFileSync(source + '/template/cmp_text.html', "utf8"));
+    var CMPCONSENTSRING = fs.readFileSync(build + '/js/lib/cmp.consentstring.js', "utf8"),
+        CMPTHROTTLE = fs.readFileSync(source + '/js/cmp.throttle.js', "utf8"),
+        CMPCSS = fs.readFileSync(build + '/css/min/sipa-cmp.min.css', "utf8"),
+        CMPHTML = htmlmin(fs.readFileSync(source + '/template/cmp.html', "utf8")),
+        CMPTEXT = htmlmin(fs.readFileSync(source + '/template/cmp_text.html', "utf8")),
+        CMPURL = 'https://sipaof.mgr.consensu.org/sipacmp/js/sipa-cmp.min.js';
 
     return es.merge(jslist.map(function(a) {
         return gulp.src(a[0])
@@ -79,7 +80,8 @@ gulp.task('compile-js', ['clean-js', 'make-sass', 'webpack', 'clean'], function 
             .pipe(replace('##CMPCSS##', CMPCSS))
             .pipe(replace('##CMPHTML##', CMPHTML))
             .pipe(replace('##CMPTEXT##', CMPTEXT))
-            .pipe(replace('https://sipaof.mgr.consensu.org/sipacmp/sipa-cmp.min.js', 'https://sipaof.mgr.consensu.org/'+(process.env.FTP_ENV || 'sipacmp')+'/sipa-cmp.min.js'))
+            .pipe(replace('##CMPURL##', CMPURL))
+            .pipe(replace(CMPURL, 'https://sipaof.mgr.consensu.org/'+(process.env.FTP_ENV || 'sipacmp')+'/sipa-cmp.min.js'))
             .pipe(rename(a[1]))
             .pipe(gulp.dest(build +"/js/dev"))
             .pipe(plumber(function(e){log.error('Erreur lors de la minification JS!', e);}))
@@ -89,19 +91,23 @@ gulp.task('compile-js', ['clean-js', 'make-sass', 'webpack', 'clean'], function 
 });
 
 gulp.task("documentation", ['html', 'oueststrap', 'clean']);
+
 gulp.task("html", ['clean'], function() {
     return gulp.src(['./docs/**/*.html'])
         .pipe(replace('../build/js/dev', process.env.FTP_ENV ? 'js' : '../build/js'))
         .pipe(gulp.dest(destination + '/'));
 });
+
 gulp.task("oueststrap", ['clean'], function() {
     return gulp.src(['./docs/**/*', '!./docs/**/*.html'])
         .pipe(gulp.dest(destination + '/'));
 });
+
 gulp.task("make-js-dev", ['compile-js', 'clean-js', 'clean'], function() {
     return gulp.src([build + '/js/dev/**/*'])
         .pipe(gulp.dest(destination + '/js'));
 });
+
 gulp.task("make-js-prod", ['compile-js', 'clean-js', 'clean'], function() {
     return gulp.src([build + '/js/min/**/*'])
         .pipe(gulp.dest(destination + '/js'));
@@ -125,6 +131,7 @@ gulp.task("clean", ["clean-js"], function(){
 gulp.task("watch", function() {
     gulp.start('make-dev-assets');
     watch( [
+            docs + '/**/*.html',
             source + '/scss/**/*.scss',
             source + '/js/**/*.js',
         ], function(){

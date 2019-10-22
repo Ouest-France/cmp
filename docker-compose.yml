@@ -1,0 +1,32 @@
+version: '3'
+services:
+
+  nginx:
+    container_name: nginx-cmp
+    build:
+      context: ./
+      dockerfile: ./docker/nginx/Dockerfile
+    restart: always
+    environment:
+      - MODE=fastcgi-phpfpm-cmp
+      - WORKER_PROCESSES=2
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ${DOCKER_PATH_ENV}/data/cmp:/data/www/cmp
+
+  builder:
+    container_name: builder-cmp
+    image: node:11-stretch-slim
+    tty: true
+    restart: always
+    command: /bin/bash -c 'cd /data/www/cmp && yarn install && yarn build && yarn watch'
+    environment:
+      - FTP_ENV=sipacmp
+    volumes:
+      - ${DOCKER_PATH_ENV}/data/cmp:/data/www/cmp
+
+volumes:
+  sock:
+    driver: local
