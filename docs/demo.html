@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>cmp sipa - localhost </title>
+    <meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" media="all" href="oueststrap/oueststrap-of.min.css">
+    <link rel="stylesheet" media="screen and (max-width: 979px)" href="oueststrap/oueststrap-of-small.min.css">
+    <link rel="stylesheet" media="screen and (min-width: 980px)" href="oueststrap/oueststrap-of-medium.min.css">
+    <link rel="stylesheet" media="screen and (min-width: 1280px)" href="oueststrap/oueststrap-of-large.min.css">
+
+    <link rel="icon" href="oueststrap/favicon.ico"/>
+
+    <!-- Google Tag Manager -->
+    <script>(function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({
+            'gtm.start':
+                new Date().getTime(), event: 'gtm.js'
+        });
+        var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src =
+            'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-KKNG2FZ');</script>
+    <!-- End Google Tag Manager -->
+
+    <script>
+        !function (e, a, c, n, t) {
+        if (a.__cmp = function () {
+            var e = [], n = function (a, c, t) {
+                "ping" === a ? t && t({gdprAppliesGlobally: !!(n && n.config && n.config.storeConsentGlobally), cmpLoaded: !1}) : e.push({
+                    command: a,
+                    parameter: c,
+                    callback: t
+                })
+            };
+            return n.commandQueue = e, n.config = a.__cmp && a.__cmp.config ? a.__cmp.config : {}, n.receiveMessage = function (a) {
+                var c = a && a.data && a.data.__cmpCall;
+                c && e.push({
+                    command: c.command, parameter: c.parameter, callback: function (e, n) {
+                        var t = {__cmpReturn: {returnValue: e, success: n, callId: c.callId}};
+                        a.source.postMessage(msgIsString ? JSON.stringify(t) : t, "*")
+                    }
+                })
+            }, (a.attachEvent || a.addEventListener)("message", function (e) {
+                a.__cmp.receiveMessage(e)
+            }, !1), function e() {
+                if (!a.frames.__cmpLocator) if (c.body) {
+                    var n = c.createElement("iframe");
+                    n.style.display = "none", n.name = "__cmpLocator", c.body.appendChild(n)
+                } else setTimeout(e, 50)
+            }(), n
+        }(), !document.getElementById(t)) {
+            var s = c.createElement("script"), o = c.getElementsByTagName("script")[0];
+            s.async = 1, s.src = "/js/sipa-cmp.min.js", s.type = "text/javascript", s.id = t, o.parentNode.insertBefore(s, o)
+        }
+    }(0, window, document, 0, "sipacmp_loader");</script>
+</head>
+
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KKNG2FZ" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+</noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<div class="container-of">
+    <h1 class="titre-rubrique">SIPA CMP - demo de l'implémentation en localhost</h1>
+    <p class="margin-large">
+        <button class="btn btn-n2"
+                onclick="localStorage.clear();var top = location.hostname.split('.').reverse();top = top[1].length > 2 ? '.' + top[1] + '.' + top[0] : location.hostname;document.cookie = 'sipacmp_consent=;expires=Thu, 01 Jan 1970 00:00:00 GMT;domain=' + top + ';path=/;'">
+            Nettoyer
+        </button>
+        <button class="btn btn-n2" onclick="__cmp.show();">Réafficher le bandeau</button>
+    </p>
+</div>
+
+</body>
+</html>
