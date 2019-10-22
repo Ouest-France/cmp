@@ -23,3 +23,9 @@ yarn build
 yarn watch
 ```
 
+## Docker
+Possiblité d'utiliser le projet avec docker pour le dev
+ 
+```
+docker-compose up --build
+```
