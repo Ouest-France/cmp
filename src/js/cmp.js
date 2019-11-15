@@ -385,6 +385,7 @@
         document.querySelector('#scmp-popin').classList.add('scmp-hidden');
     };
     window.__cmp.show = function() {
+        window.prevent_refresh = true;
         __cmp._create_banner();
         document.getElementById('scmp-popin').classList.remove('scmp-hidden');
         document.getElementById('scmp-btn-parameters').classList.remove('scmp-hidden');
