@@ -233,6 +233,7 @@
         // HTML
         __cmp.div_banner = document.createElement('div');
         var html = '##CMPHTML##';
+        var list = false;
         html = html.replace('##scmp-text##', _config.text || '##CMPTEXT##')
         __cmp.div_banner.innerHTML = html;
         __cmp.div_banner.setAttribute('role', 'dialog');
@@ -241,60 +242,6 @@
         document.body.appendChild(__cmp.div_banner);
 
         _setCheckbox();
-
-        __cmp('getVendorConsents', null, function(res){
-            var ul = document.querySelector('#scmp-list-partners');
-            var template = ul.innerHTML;
-            var purposes = {};
-            res.vendorList.purposes.forEach(function(purpose) {
-                purposes[purpose.id] = purpose;
-            });
-            var features = {};
-            res.vendorList.features.forEach(function(feature) {
-                features[feature.id] = feature;
-            });
-
-            var html = '';
-            res.vendorList.vendors.sort(function(v1, v2){ return (v1.name < v2.name) ? -1 : (v1.name > v2.name) ? 1 : 0}).forEach(function(vendor){
-                var desc = '<div class="scmp-partner-detail scmp-hidden">';
-
-                desc += '<div><div class="scmp-strong">Politique de vie privée :</div><a href="' + vendor.policyUrl + '" target="_policyVendor">' + vendor.policyUrl + '</a></div>';
-
-                if(vendor.purposeIds.length) {
-                    desc += '<div class="scmp-title">Finalités (Consentement) : </div>';
-                    vendor.purposeIds.forEach(function(purpose) {
-                        desc += '<div>' + purposes[purpose].name + '</div>';
-                    });
-                }
-
-                if(vendor.legIntPurposeIds.length) {
-                    desc += '<div class="scmp-title">Finalités (Intérêts légitimes) : </div>';
-                    vendor.legIntPurposeIds.forEach(function(purpose) {
-                        desc += '<div>' + purposes[purpose].name + '</div>';
-                    });
-                }
-
-                if(vendor.featureIds.length) {
-                    desc += '<div class="scmp-title">Fonctionnalités : </div>';
-                    vendor.featureIds.forEach(function(feature) {
-                        desc += '<div>' + features[feature].name + '</div>';
-                    });
-                }
-
-                desc += '</div>';
-
-                var text = template;
-                text = text.replace(/partner-id/g, '' + vendor.id);
-                text = text.replace(/scmp-partner-i/g, 'scmp-partner-' + vendor.id);
-                text = text.replace(/partner-name/, '' + vendor.name);
-                text = text.replace(/partner-text/, desc);
-                text = text.replace(/(checked)/, res.vendorConsents[vendor.id] ? '$1' : '');
-
-                html += text;
-            });
-            ul.innerHTML = html;
-        });
-
 
         function _togglePopinParameters(open) {
             document.querySelector('#scmp-popin').classList[open?'remove':'add']('scmp-parameters-open');
@@ -321,6 +268,61 @@
             document.querySelector('#scmp-actions-partners').classList[!open?'remove':'add']('scmp-hidden');
             document.querySelector('#scmp-partners').classList[!open?'remove':'add']('scmp-hidden');
             document.querySelector('#scmp-overlay').classList[!open?'remove':'add']('scmp-hidden');
+            if(!list) {
+                __cmp('getVendorConsents', null, function(res){
+                    var ul = document.querySelector('#scmp-list-partners');
+                    var template = ul.innerHTML;
+                    var purposes = {};
+                    res.vendorList.purposes.forEach(function(purpose) {
+                        purposes[purpose.id] = purpose;
+                    });
+                    var features = {};
+                    res.vendorList.features.forEach(function(feature) {
+                        features[feature.id] = feature;
+                    });
+        
+                    var html = '';
+                    res.vendorList.vendors.sort(function(v1, v2){ return (v1.name < v2.name) ? -1 : (v1.name > v2.name) ? 1 : 0}).forEach(function(vendor){
+                        var desc = '<div class="scmp-partner-detail scmp-hidden">';
+        
+                        desc += '<div><div class="scmp-strong">Politique de vie privée :</div><a href="' + vendor.policyUrl + '" target="_policyVendor">' + vendor.policyUrl + '</a></div>';
+        
+                        if(vendor.purposeIds.length) {
+                            desc += '<div class="scmp-title">Finalités (Consentement) : </div>';
+                            vendor.purposeIds.forEach(function(purpose) {
+                                desc += '<div>' + purposes[purpose].name + '</div>';
+                            });
+                        }
+        
+                        if(vendor.legIntPurposeIds.length) {
+                            desc += '<div class="scmp-title">Finalités (Intérêts légitimes) : </div>';
+                            vendor.legIntPurposeIds.forEach(function(purpose) {
+                                desc += '<div>' + purposes[purpose].name + '</div>';
+                            });
+                        }
+        
+                        if(vendor.featureIds.length) {
+                            desc += '<div class="scmp-title">Fonctionnalités : </div>';
+                            vendor.featureIds.forEach(function(feature) {
+                                desc += '<div>' + features[feature].name + '</div>';
+                            });
+                        }
+        
+                        desc += '</div>';
+        
+                        var text = template;
+                        text = text.replace(/partner-id/g, '' + vendor.id);
+                        text = text.replace(/scmp-partner-i/g, 'scmp-partner-' + vendor.id);
+                        text = text.replace(/partner-name/, '' + vendor.name);
+                        text = text.replace(/partner-text/, desc);
+                        text = text.replace(/(checked)/, res.vendorConsents[vendor.id] ? '$1' : '');
+        
+                        html += text;
+                    });
+                    ul.innerHTML = html;
+                });
+                list = true;
+            }
         }
 
         // Gestion affichage parametres
