@@ -594,7 +594,7 @@
                 var container = (_config.scrollContainer || document.documentElement);
                 if ((window.pageYOffset || container.scrollTop) > window.innerHeight * (_config.scrollPercent != undefined ? _config.scrollPercent : .1)) { // 10%
                     (_config.scrollContainer || window).removeEventListener('scroll', evt_scroll);
-                    if(consentData !== undefined && consentData !== 'undefined')  {
+                    if(typeof consentData !== "undefined")  {
                         allowedByScroll();
                     } else {
                         var interval = setInterval(function(){
