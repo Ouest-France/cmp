@@ -586,8 +586,6 @@
             _setCheckbox();
             _setVendorCheckbox();
             consent = __cmp.save_consent(_consent_family(63),'scroll'); // consentement par Scroll
-
-            window.removeEventListener('scroll', evt_scroll);
         }
 
         if(!window[cn + '_gcda']) {
@@ -595,14 +593,14 @@
             window.evt_scroll = _throttle(function() {
                 var container = (_config.scrollContainer || document.documentElement);
                 if ((window.pageYOffset || container.scrollTop) > window.innerHeight * (_config.scrollPercent != undefined ? _config.scrollPercent : .1)) { // 10%
-                    if(typeof consentData !== undefined && typeof consentData !== 'undefined')  {
+                    (_config.scrollContainer || window).removeEventListener('scroll', evt_scroll);
+                    if(consentData !== undefined && consentData !== 'undefined')  {
                         allowedByScroll();
                     } else {
                         var interval = setInterval(function(){
                             if(consentData !== undefined) {
                                 allowedByScroll();
                                 clearInterval(interval);
-                                interval = false;
                             }
                         },200);
                     }
