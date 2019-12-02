@@ -287,7 +287,7 @@
                 res.vendorList.vendors.sort(function(v1, v2){ return (v1.name < v2.name) ? -1 : (v1.name > v2.name) ? 1 : 0}).forEach(function(vendor){
                     var desc = '<div class="scmp-partner-detail scmp-hidden">';
 
-                    desc += '<div><div class="scmp-strong">Politique de vie privée :</div><a href="' + vendor.policyUrl + '" target="_policyVendor">' + vendor.policyUrl + '</a></div>';
+                    desc += '<div><div class="scmp-strong">Politique de vie privée :</div><a href="' + vendor.policyUrl + '" target="_policyVendor" rel="nofollow">' + vendor.policyUrl + '</a></div>';
 
                     if(vendor.purposeIds.length) {
                         desc += '<div class="scmp-title">Finalités (Consentement) : </div>';
