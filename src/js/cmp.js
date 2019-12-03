@@ -268,10 +268,10 @@
             document.querySelector('#scmp-actions-partners').classList[!open?'remove':'add']('scmp-hidden');
             document.querySelector('#scmp-partners').classList[!open?'remove':'add']('scmp-hidden');
             document.querySelector('#scmp-overlay').classList[!open?'remove':'add']('scmp-hidden');
-            
+
             if(list) return;
-            
-            __cmp('getVendorConsents', null, function(res){                
+
+            __cmp('getVendorConsents', null, function(res){
                 var ul = document.querySelector('#scmp-list-partners');
                 var template = ul.innerHTML;
                 var purposes = {};
@@ -322,7 +322,7 @@
                     html += text;
                 });
                 ul.innerHTML = html;
-                
+
                 list = true;
             });
         }
@@ -598,11 +598,11 @@
                         allowedByScroll();
                     } else {
                         var interval = setInterval(function(){
-                            if(consentData !== undefined) {
+                            if(typeof consentData !== "undefined") {
                                 allowedByScroll();
                                 clearInterval(interval);
                             }
-                        },200);
+                        }, 200);
                     }
                 }
             }, 200, { trailing: true, leading: true });
