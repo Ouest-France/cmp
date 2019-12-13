@@ -101,7 +101,7 @@
     };
     // Permet de changer l'élément sur lequel on écoute le scroll
     var _setScrollContainer = function (arg) {
-        if (arg instanceof HTMLElement) {
+        if (arg instanceof HTMLElement && typeof evt_scroll !== 'undefined') {
             (_config.scrollContainer || window).removeEventListener('scroll', evt_scroll);
             _config.scrollContainer = arg;
             _config.scrollContainer.addEventListener('scroll', evt_scroll);
