@@ -13,15 +13,67 @@
 
     <link rel="icon" href="oueststrap/favicon.ico" />
 
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-KKNG2FZ');</script>
-    <!-- End Google Tag Manager -->
+<script>
+    window.gdprAppliesGlobally=true;
+    (function(){function n(){if(!window.frames.__cmpLocator){if(document.body&&document.body.firstChild){var e=document.body;var t=document.createElement("iframe");t.style.display="none";t.name="__cmpLocator";t.title="cmpLocator";e.insertBefore(t,e.firstChild)}else{setTimeout(n,5)}}}function e(e,t,n){if(typeof n!=="function"){return}
+    if(!window.__cmpBuffer){window.__cmpBuffer=[]}if(e==="ping"){n({gdprAppliesGlobally:window.gdprAppliesGlobally,cmpLoaded:false},true)}else{window.__cmpBuffer.push({command:e,parameter:t,callback:n})}}e.stub=true;function t(r){if(!window.__cmp||window.__cmp.stub!==true){return}if(!r.data){return}var a=typeof r.data==="string";var e;try{e=a?JSON.parse(r.data):r.data}catch(t){return}if(e.__cmpCall){var o=e.__cmpCall;window.__cmp(o.command,o.parameter,function(e,t){var n={__cmpReturn:{returnValue:e,success:t,callId:o.callId}};r.source.postMessage(a?JSON.stringify(n):n,"*")})}}if(typeof window.__cmp!=="function"){window.__cmp=e;if(window.addEventListener){window.addEventListener("message",t,false)}else{window.attachEvent("onmessage",t)}}n()})();(function(e){var t=document.createElement("script");t.id="spcloader";t.type="text/javascript";t.async=true;t.src="https://sdk.privacy-center.org/"+e+"/loader.js?target="+document.location.hostname;t.charset="utf-8";var n=document.getElementsByTagName("script")[0];
+    n.parentNode.insertBefore(t,n)})("aeca3085-d50f-45e1-8236-457f11ef78b8");
 
-    <script>!function(e,a,c,n,t){if(a.__cmp=function(){var e=[],n=function(a,c,t){"ping"===a?t&&t({gdprAppliesGlobally:!!(n&&n.config&&n.config.storeConsentGlobally),cmpLoaded:!1}):e.push({command:a,parameter:c,callback:t})};return n.commandQueue=e,n.config=a.__cmp&&a.__cmp.config?a.__cmp.config:{},n.receiveMessage=function(a){var c=a&&a.data&&a.data.__cmpCall;c&&e.push({command:c.command,parameter:c.parameter,callback:function(e,n){var t={__cmpReturn:{returnValue:e,success:n,callId:c.callId}};a.source.postMessage(msgIsString?JSON.stringify(t):t,"*")}})},(a.attachEvent||a.addEventListener)("message",function(e){a.__cmp.receiveMessage(e)},!1),function e(){if(!a.frames.__cmpLocator)if(c.body){var n=c.createElement("iframe");n.style.display="none",n.name="__cmpLocator",c.body.appendChild(n)}else setTimeout(e,50)}(),n}(),!document.getElementById(t)){var s=c.createElement("script"),o=c.getElementsByTagName("script")[0];s.async=1,s.src="https://sipaof.mgr.consensu.org/sipacmp/js/sipa-cmp.min.js",s.type="text/javascript",s.id=t,o.parentNode.insertBefore(s,o)}}(0,window,document,0,"sipacmp_loader");</script>
+    window.didomiConfig = {
+        preferences: {
+            content: {
+                agreeToAll: {
+                    fr: 'Accepter toutes les finalités'
+                }
+            }
+        }
+    };
+
+    window.didomiOnReady = window.didomiOnReady || [];
+    window.didomiOnReady.push(function (Didomi) {
+        if ('undefined' === typeof window.tc_vars) {
+            window.tc_vars = {};
+        };
+        window.tc_vars["didomiGDPRApplies"] = window.didomiState.didomiGDPRApplies;
+        window.tc_vars["didomiIABConsent"] = window.didomiState.didomiIABConsent;
+        window.tc_vars["didomiVendorsConsent"] = window.didomiState.didomiVendorsConsent;
+        window.tc_vars["didomiVendorsConsentUnknown"] = window.didomiState.didomiVendorsConsentUnknown;
+        window.tc_vars["didomiVendorsConsentDenied"] = window.didomiState.didomiVendorsConsentDenied;
+        window.tc_vars["didomiPurposesConsent"] = window.didomiState.didomiPurposesConsent;
+        window.tc_vars["didomiPurposesConsentUnknown"] = window.didomiState.didomiPurposesConsentUnknown;
+        window.tc_vars["didomiPurposesConsentDenied"] = window.didomiState.didomiPurposesConsentDenied;
+        window.tc_vars["didomiExperimentId"] = window.didomiState.didomiExperimentId;
+        window.tc_vars["didomiExperimentUserGroup"] = window.didomiState.didomiExperimentUserGroup;
+
+        if(Didomi.notice.isVisible()) {
+            window.addEventListener('scroll', scrollListener);
+        }
+    });
+
+    function scrollListener(e) {
+        var windowHeight = window.innerHeight ||
+        document.documentElement.clientHeight ||
+        document.body.clientHeight || 0;
+        var docHeight = Math.max(
+            document.body.scrollHeight || 0,
+            document.documentElement.scrollHeight || 0,
+            document.body.offsetHeight || 0,
+            document.documentElement.offsetHeight || 0,
+            document.body.clientHeight || 0,
+            document.documentElement.clientHeight || 0,
+            );
+        var yScroll = window.pageYOffset ||
+        document.body.scrollTop ||
+        document.documentElement.scrollTop || 0;
+        var scrollPercent = (yScroll / (docHeight - windowHeight)) * 100;
+
+        if (scrollPercent >= 10) {
+            Didomi.setUserAgreeToAll();
+            window.removeEventListener("scroll", scrollListener);
+        }
+    }
+</script>
+
 </head>
 <body>
 

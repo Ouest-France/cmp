@@ -126,6 +126,7 @@ gulp.task("watch", function() {
     gulp.start('make-dev-assets');
     watch( [
             source + '/scss/**/*.scss',
+            './docs/**/*',
             source + '/js/**/*.js',
         ], function(){
         gulp.start('make-dev-assets');
