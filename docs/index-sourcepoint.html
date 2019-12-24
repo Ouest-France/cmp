@@ -13,66 +13,19 @@
 
     <link rel="icon" href="oueststrap/favicon.ico" />
 
-<script>
-    window.gdprAppliesGlobally=true;
-    (function(){function n(){if(!window.frames.__cmpLocator){if(document.body&&document.body.firstChild){var e=document.body;var t=document.createElement("iframe");t.style.display="none";t.name="__cmpLocator";t.title="cmpLocator";e.insertBefore(t,e.firstChild)}else{setTimeout(n,5)}}}function e(e,t,n){if(typeof n!=="function"){return}
-    if(!window.__cmpBuffer){window.__cmpBuffer=[]}if(e==="ping"){n({gdprAppliesGlobally:window.gdprAppliesGlobally,cmpLoaded:false},true)}else{window.__cmpBuffer.push({command:e,parameter:t,callback:n})}}e.stub=true;function t(r){if(!window.__cmp||window.__cmp.stub!==true){return}if(!r.data){return}var a=typeof r.data==="string";var e;try{e=a?JSON.parse(r.data):r.data}catch(t){return}if(e.__cmpCall){var o=e.__cmpCall;window.__cmp(o.command,o.parameter,function(e,t){var n={__cmpReturn:{returnValue:e,success:t,callId:o.callId}};r.source.postMessage(a?JSON.stringify(n):n,"*")})}}if(typeof window.__cmp!=="function"){window.__cmp=e;if(window.addEventListener){window.addEventListener("message",t,false)}else{window.attachEvent("onmessage",t)}}n()})();(function(e){var t=document.createElement("script");t.id="spcloader";t.type="text/javascript";t.async=true;t.src="https://sdk.privacy-center.org/"+e+"/loader.js?target="+document.location.hostname;t.charset="utf-8";var n=document.getElementsByTagName("script")[0];
-    n.parentNode.insertBefore(t,n)})("aeca3085-d50f-45e1-8236-457f11ef78b8");
-
-    window.didomiConfig = {
-        preferences: {
-            content: {
-                agreeToAll: {
-                    fr: 'Accepter toutes les finalités'
-                }
+<script type="text/javascript">
+        (function () { var e = false; var c = window; var t = document; function r() { if (!c.frames["__cmpLocator"]) { if (t.body) { var a = t.body; var e = t.createElement("iframe"); e.style.cssText = "display:none"; e.name = "__cmpLocator"; a.appendChild(e) } else { setTimeout(r, 5) } } } r(); function p() { var a = arguments; __cmp.a = __cmp.a || []; if (!a.length) { return __cmp.a } else if (a[0] === "ping") { a[2]({ gdprAppliesGlobally: e, cmpLoaded: false }, true) } else { __cmp.a.push([].slice.apply(a)) } } function l(t) { var r = typeof t.data === "string"; try { var a = r ? JSON.parse(t.data) : t.data; if (a.__cmpCall) { var n = a.__cmpCall; c.__cmp(n.command, n.parameter, function (a, e) { var c = { __cmpReturn: { returnValue: a, success: e, callId: n.callId } }; t.source.postMessage(r ? JSON.stringify(c) : c, "*") }) } } catch (a) { } } if (typeof __cmp !== "function") { c.__cmp = p; __cmp.msgHandler = l; c.addEventListener("message", l, false) } })();
+    </script>
+    <script>
+        window._sp_ = {
+            config: {
+                mmsDomain: "https://mms.sp-prod.net",
+                accountId: "54362",
+                cmpOrigin: "https://sourcepoint.mgr.consensu.org"
             }
         }
-    };
-
-    window.didomiOnReady = window.didomiOnReady || [];
-    window.didomiOnReady.push(function (Didomi) {
-        if ('undefined' === typeof window.tc_vars) {
-            window.tc_vars = {};
-        };
-        window.tc_vars["didomiGDPRApplies"] = window.didomiState.didomiGDPRApplies;
-        window.tc_vars["didomiIABConsent"] = window.didomiState.didomiIABConsent;
-        window.tc_vars["didomiVendorsConsent"] = window.didomiState.didomiVendorsConsent;
-        window.tc_vars["didomiVendorsConsentUnknown"] = window.didomiState.didomiVendorsConsentUnknown;
-        window.tc_vars["didomiVendorsConsentDenied"] = window.didomiState.didomiVendorsConsentDenied;
-        window.tc_vars["didomiPurposesConsent"] = window.didomiState.didomiPurposesConsent;
-        window.tc_vars["didomiPurposesConsentUnknown"] = window.didomiState.didomiPurposesConsentUnknown;
-        window.tc_vars["didomiPurposesConsentDenied"] = window.didomiState.didomiPurposesConsentDenied;
-        window.tc_vars["didomiExperimentId"] = window.didomiState.didomiExperimentId;
-        window.tc_vars["didomiExperimentUserGroup"] = window.didomiState.didomiExperimentUserGroup;
-
-        if(Didomi.notice.isVisible()) {
-            window.addEventListener('scroll', scrollListener);
-        }
-    });
-
-    function scrollListener(e) {
-        var windowHeight = window.innerHeight ||
-        document.documentElement.clientHeight ||
-        document.body.clientHeight || 0;
-        var docHeight = Math.max(
-            document.body.scrollHeight || 0,
-            document.documentElement.scrollHeight || 0,
-            document.body.offsetHeight || 0,
-            document.documentElement.offsetHeight || 0,
-            document.body.clientHeight || 0,
-            document.documentElement.clientHeight || 0,
-            );
-        var yScroll = window.pageYOffset ||
-        document.body.scrollTop ||
-        document.documentElement.scrollTop || 0;
-        var scrollPercent = (yScroll / (docHeight - windowHeight)) * 100;
-
-        if (scrollPercent >= 10) {
-            Didomi.setUserAgreeToAll();
-            window.removeEventListener("scroll", scrollListener);
-        }
-    }
-</script>
+    </script>
+    <script src="https://dialogue.sp-prod.net/messagingWithoutDetection.js"></script>
 
 </head>
 <body>
@@ -233,6 +186,7 @@
             <textarea>https://vendorlist.consensu.org/vendorlist.json</textarea>
         </div>
     </div>
+
     <script>
         var cmpl = setInterval(function(){
             __cmp('ping', {}, function(e){
