@@ -171,7 +171,7 @@
                 function resolve() {
                     var vendorIds = parameter || [];
                     var vendorConsents = {};
-                    consentData.vendorList.vendors.forEach(function(vendor) {
+                    consentData.vendorList.vendors.filter(function(vendor){return !vendor.deletedDate}).forEach(function(vendor) {
                         if (!vendorIds.length || vendorIds.indexOf(vendor.id) !== -1) {
                             vendorConsents[vendor.id] = consentData.allowedVendorIds.indexOf(vendor.id) !== -1
                         }
@@ -309,7 +309,7 @@
                 });
 
                 var html = '';
-                res.vendorList.vendors.sort(function(v1, v2){ return (v1.name < v2.name) ? -1 : (v1.name > v2.name) ? 1 : 0}).forEach(function(vendor){
+                res.vendorList.vendors.filter(function(vendor){return !vendor.deletedDate}).sort(function(v1, v2){ return (v1.name < v2.name) ? -1 : (v1.name > v2.name) ? 1 : 0}).forEach(function(vendor){
                     var desc = '<div class="scmp-partner-detail scmp-hidden">';
 
                     desc += '<div><div class="scmp-strong">Politique de vie privée :</div><a href="' + vendor.policyUrl + '" target="_policyVendor" rel="nofollow">' + vendor.policyUrl + '</a></div>';
@@ -380,7 +380,7 @@
             _togglePopinParameters(false);
         });
         document.querySelector('#scmp-btn-allow-all-partners').addEventListener('click', function(){
-            consentData.allowedVendorIds = consentData.vendorList.vendors.map(function(vendor){return vendor.id});
+            consentData.allowedVendorIds = consentData.vendorList.vendors.filter(function(vendor){return !vendor.deletedDate}).map(function(vendor){return vendor.id});
             _setVendorCheckbox();
             _togglePopinPartenaires(true);
             _togglePopinParameters(false);
@@ -390,7 +390,7 @@
         // tout
         document.querySelector('#scmp-btn-allow').addEventListener('click', function(){
             // console.log('consent all');
-            consentData.allowedVendorIds = consentData.vendorList.vendors.map(function(vendor){return vendor.id});
+            consentData.allowedVendorIds = consentData.vendorList.vendors.filter(function(vendor){return !vendor.deletedDate}).map(function(vendor){return vendor.id});
             _setCheckbox();
             _setVendorCheckbox();
             consent = __cmp.save_consent(_consent_family(63),'click all');
@@ -483,7 +483,13 @@
 
                         _init(true);
 
-                        consentData.allowedVendorIds = consentData.vendorList.vendors.map(function(vendor){return vendor.id});
+
+                        consentData.vendorList.vendors.filter(function(vendor){return !vendor.deletedDate}).forEach(function(vendor){
+                            // consent to new partners
+                            if(consentData.allowedVendorIds.indexOf(vendor.id) === -1) {
+                                consentData.allowedVendorIds.push(vendor.id)
+                            }
+                        });
                         consent = __cmp.save_consent(consent,'navigation'); // consent all
                     }
                     else {
@@ -536,7 +542,7 @@
             if(_consent_ts > _temp_ts && _consent_ts < _fix_ts && consentData.allowedVendorIds.length == 0 && consentData.allowedPurposeIds.length == 5) {
                 // console.log('sipacmp temp fix');
 
-                consentData.allowedVendorIds = consentData.vendorList.vendors.map(function(vendor){return vendor.id});
+                consentData.allowedVendorIds = consentData.vendorList.vendors.filter(function(vendor){return !vendor.deletedDate}).map(function(vendor){return vendor.id});
                 consent = __cmp.save_consent(consent,'fix');
             }
 
@@ -587,7 +593,7 @@
     // consentement par navigation
     if(_consent_token() && !window[cn + '_gcda'] && url.indexOf('/politique-de-protection-des-donnees-personnelles') < 0 && url.indexOf('/cookies') < 0) { // _global_consent_doesnt_apply
         // console.log('consent nav')
-        consentData.allowedVendorIds = consentData.vendorList.vendors.map(function(vendor){return vendor.id});
+        consentData.allowedVendorIds = consentData.vendorList.filter(function(vendor){return !vendor.deletedDate}).vendors.map(function(vendor){return vendor.id});
         consent = __cmp.save_consent(_consent_family(63),'navigation'); // consent all
     }
 
@@ -607,7 +613,7 @@
         _consent_token(true);
 
         function allowedByScroll() {
-            consentData.allowedVendorIds = consentData.vendorList.vendors.map(function(vendor){return vendor.id});
+            consentData.allowedVendorIds = consentData.vendorList.filter(function(vendor){return !vendor.deletedDate}).vendors.map(function(vendor){return vendor.id});
             _setCheckbox();
             _setVendorCheckbox();
             consent = __cmp.save_consent(_consent_family(63),'scroll'); // consentement par Scroll
