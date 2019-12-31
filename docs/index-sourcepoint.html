@@ -13,39 +13,19 @@
 
     <link rel="icon" href="oueststrap/favicon.ico" />
 
-<!--start Sourcepoint code-->
-<script src='//d2zv5rkii46miq.cloudfront.net/0/latest/cmp_shim.js'></script>
-<script type = "text/javascript">
-window._sp_ = window._sp_ || {};
-window._sp_.config = window._sp_.config || {};
-
-//Replace YOUR_ACCOUNT_ID with the account ID provided
-//by Sourcepoint
-window._sp_.config.account_id = 1173;
-
-// replace the value below with your CNAME’d messaging subdomain
-window._sp_.config.mms_domain = 'message000.sp-prod.net' ;
-
-// messaging-specific configuration
-window._sp_.mms = window._sp_.mms || {};
-window._sp_.mms.cmd = window._sp_.mms.cmd || [];
-
-//CMP Flags
-window._sp_.config.cmp = _sp_.config.cmp || {};
-window._sp_.config.cmp.enabled = true;
-
-//Have message show immediately
-window._sp_.config.detection = window._sp_.config.detection || {};
-window._sp_.config.detection.timeout = 1;
-
-//Code to call the server and display a message
-window._sp_.mms.cmd.push( function () {
-    window._sp_.mms.startMsg();
-});
+<script type="text/javascript">
+    (function () { var e = false; var c = window; var t = document; function r() { if (!c.frames["__cmpLocator"]) { if (t.body) { var a = t.body; var e = t.createElement("iframe"); e.style.cssText = "display:none"; e.name = "__cmpLocator"; a.appendChild(e) } else { setTimeout(r, 5) } } } r(); function p() { var a = arguments; __cmp.a = __cmp.a || []; if (!a.length) { return __cmp.a } else if (a[0] === "ping") { a[2]({ gdprAppliesGlobally: e, cmpLoaded: false }, true) } else { __cmp.a.push([].slice.apply(a)) } } function l(t) { var r = typeof t.data === "string"; try { var a = r ? JSON.parse(t.data) : t.data; if (a.__cmpCall) { var n = a.__cmpCall; c.__cmp(n.command, n.parameter, function (a, e) { var c = { __cmpReturn: { returnValue: a, success: e, callId: n.callId } }; t.source.postMessage(r ? JSON.stringify(c) : c, "*") }) } } catch (a) { } } if (typeof __cmp !== "function") { c.__cmp = p; __cmp.msgHandler = l; c.addEventListener("message", l, false) } })();
 </script>
-<!--URL in line below needs to be replaced with messaging file location on your CDN-->
-<script type="text/javascript" src="sourcepoint.js"></script>
-<!--end Sourcepoint code-->
+<script>
+    window._sp_ = {
+        config: {
+            mmsDomain: "https://message000.sp-prod.net",
+            accountId: "1173",
+            cmpOrigin: "https://sourcepoint.mgr.consensu.org"
+        }
+    }
+</script>
+<script src="https://dialogue.sp-prod.net/messagingWithoutDetection.js"></script>
 
 </head>
 <body>
