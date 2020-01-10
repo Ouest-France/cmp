@@ -593,7 +593,7 @@
     // consentement par navigation
     if(_consent_token() && !window[cn + '_gcda'] && url.indexOf('/politique-de-protection-des-donnees-personnelles') < 0 && url.indexOf('/cookies') < 0) { // _global_consent_doesnt_apply
         // console.log('consent nav')
-        consentData.allowedVendorIds = consentData.vendorList.vendors.filter(function(vendor){return !vendor.deletedDate}).vendors.map(function(vendor){return vendor.id});
+        consentData.allowedVendorIds = consentData.vendorList.vendors.filter(function(vendor){return !vendor.deletedDate}).map(function(vendor){return vendor.id});
         consent = __cmp.save_consent(_consent_family(63),'navigation'); // consent all
     }
 
@@ -613,7 +613,7 @@
         _consent_token(true);
 
         function allowedByScroll() {
-            consentData.allowedVendorIds = consentData.vendorList.vendors.filter(function(vendor){return !vendor.deletedDate}).vendors.map(function(vendor){return vendor.id});
+            consentData.allowedVendorIds = consentData.vendorList.vendors.filter(function(vendor){return !vendor.deletedDate}).map(function(vendor){return vendor.id});
             _setCheckbox();
             _setVendorCheckbox();
             consent = __cmp.save_consent(_consent_family(63),'scroll'); // consentement par Scroll
