@@ -6,8 +6,10 @@
 <meta name="robots" content="noindex">
 
 <meta name="viewport" content="width=device-width">
-<link rel="stylesheet" href="https://cdn.sipaof.fr/sipaui/latest/css/main-sipaui.css" type="text/css" media="screen"/>
-
+<link rel="stylesheet" media="all" href="oueststrap/oueststrap-of.min.css">
+<link rel="stylesheet" media="screen and (max-width: 979px)" href="oueststrap/oueststrap-of-small.min.css">
+<link rel="stylesheet" media="screen and (min-width: 980px)" href="oueststrap/oueststrap-of-medium.min.css">
+<link rel="stylesheet" media="screen and (min-width: 1280px)" href="oueststrap/oueststrap-of-large.min.css">
 
     <link rel="icon" href="oueststrap/favicon.ico" />
 
@@ -19,7 +21,6 @@
     })(window,document,'script','dataLayer','GTM-KKNG2FZ');</script>
     <!-- End Google Tag Manager -->
 
-    <script id="sipacmp_loader"></script>
     <script>!function(e,a,c,n,t){if(a.__cmp=function(){var e=[],n=function(a,c,t){"ping"===a?t&&t({gdprAppliesGlobally:!!(n&&n.config&&n.config.storeConsentGlobally),cmpLoaded:!1}):e.push({command:a,parameter:c,callback:t})};return n.commandQueue=e,n.config=a.__cmp&&a.__cmp.config?a.__cmp.config:{},n.receiveMessage=function(a){var c=a&&a.data&&a.data.__cmpCall;c&&e.push({command:c.command,parameter:c.parameter,callback:function(e,n){var t={__cmpReturn:{returnValue:e,success:n,callId:c.callId}};a.source.postMessage(msgIsString?JSON.stringify(t):t,"*")}})},(a.attachEvent||a.addEventListener)("message",function(e){a.__cmp.receiveMessage(e)},!1),function e(){if(!a.frames.__cmpLocator)if(c.body){var n=c.createElement("iframe");n.style.display="none",n.name="__cmpLocator",c.body.appendChild(n)}else setTimeout(e,50)}(),n}(),!document.getElementById(t)){var s=c.createElement("script"),o=c.getElementsByTagName("script")[0];s.async=1,s.src="https://sipaof.mgr.consensu.org/sipacmp/js/sipa-cmp.min.js",s.type="text/javascript",s.id=t,o.parentNode.insertBefore(s,o)}}(0,window,document,0,"sipacmp_loader");</script>
 </head>
 <body class="sipaui">
@@ -226,6 +227,5 @@ console.log(e, s);
 
     });
     </script>
-    <script src="../build/js/dev/sipa-cmp.min.js"></script>
 </body>
 </html>
