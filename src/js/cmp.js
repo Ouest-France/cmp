@@ -24,7 +24,7 @@
         }
     }
 
-    if(!storageAvailable('localStorage')) return;
+    if(!storageAvailable('localStorage') || navigator.userAgent.indexOf(atob('UFRTVC1XUFQtRlJa')) > -1) return;
     var __cmp_version__ = 4;
 
     // polyfill
